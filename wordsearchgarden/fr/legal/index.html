@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="../favicon.ico">
+  <link rel="icon" href="https://games.tom-befieux.fr/wordsearchgarden/favicon.ico">
   <title>Politique de confidentialité — Jardin des mots mêlés</title>
   <style>
     :root{
@@ -79,19 +79,19 @@
 
         <div class="lang-selector">
           <select onchange="location = this.value;">
-            <option value="?lang=fr" selected>
+            <option value="https://games.tom-befieux.fr/root/wordsearchgarden/fr/legal" selected>
               🇫🇷 Français
             </option>
-            <option value="?lang=en">
+            <option value="https://games.tom-befieux.fr/root/wordsearchgarden/en/legal">
               🇬🇧 English
             </option>
-            <option value="?lang=es">
+            <option value="https://games.tom-befieux.fr/root/wordsearchgarden/es/legal">
               🇪🇸 Español
             </option>
-            <option value="?lang=de">
+            <option value="https://games.tom-befieux.fr/root/wordsearchgarden/de/legal">
               🇩🇪 Deutsch
             </option>
-            <option value="?lang=it">
+            <option value="https://games.tom-befieux.fr/root/wordsearchgarden/it/legal">
               🇮🇹 Italiano
             </option>
           </select>
@@ -136,23 +136,38 @@
 
       <h3 style="margin-top:8px">b. Analyse anonyme et rapports de bugs</h3>
       <p>
-        L’Application envoie des données anonymisées dans deux contextes :
+        L’Application peut transmettre automatiquement des données techniques anonymisées dans les cas suivants :
       </p>
       <ul>
-        <li>Lors de l’envoi volontaire d’un rapport de bug par l’utilisateur (via un formulaire intégré).</li>
-        <li>Pour des analyses statistiques anonymes destinées à comprendre l’usage global du jeu et améliorer la qualité du produit.</li>
+        <li>Lorsqu’une erreur ou un crash survient (via Firebase Crashlytics)</li>
+        <li>Lors de l’analyse statistique de l’utilisation générale du jeu (via Firebase Analytics)</li>
       </ul>
       <p><strong>Données concernées :</strong></p>
       <ul>
         <li>Version du système d’exploitation</li>
         <li>Version du jeu</li>
-        <li>Informations techniques sur le fonctionnement de l’application</li>
+        <li>Informations techniques sur les crashs ou l’utilisation</li>
         <li>Un identifiant généré localement et non traçable</li>
-        <li>Informations optionnelles saisies par l’utilisateur dans son message</li>
+        <li>Informations optionnelles saisies par l'utilisateur lors d'envois manuels de rapports</li>
       </ul>
       <p>
         Aucune donnée transmise dans ces contextes ne permet d’identifier personnellement un utilisateur.
       </p>
+
+      <h3 style="margin-top:8px">c. Outils Firebase (Crashlytics & Analytics — Google LLC)</h3>
+      <p>L’Application utilise Firebase Crashlytics et Firebase Analytics, services fournis par Google LLC, afin d’améliorer la stabilité, diagnostiquer les erreurs et comprendre l’utilisation générale de l’application.</p>
+
+      <p><strong>Données concernées :</strong></p>
+      <ul>
+        <li>Version de l’application</li>
+        <li>Version du système d’exploitation</li>
+        <li>Modèle du smartphone</li>
+        <li>Informations techniques liées aux crashs (pile d’appels, état de la mémoire, état du réseau)</li>
+        <li>Événements d’utilisation anonymisés (par exemple : écrans visités, durée des sessions)</li>
+        <li>Identifiant technique généré par Firebase (non permettant d’identifier directement l’utilisateur)</li>
+      </ul>
+      <p>Ces données sont pseudonymisées, ne permettent pas d'identifier personnellement un utilisateur, et sont utilisées exclusivement pour améliorer la qualité, la performance et la stabilité de l’Application.</p>
+      <p>La politique de confidentialité de Firebase est disponible ici : <a href="https://firebase.google.com/support/privacy">https://firebase.google.com/support/privacy</a></p>
     </section>
 
     <section>
@@ -182,7 +197,7 @@
         Les seules entités susceptibles de recevoir ou traiter des données sont :
       </p>
       <ul>
-        <li><strong>Google LLC</strong> (AdMob, Google Play)</li>
+        <li><strong>Google LLC</strong> (AdMob, Firebase, Google Play)</li>
         <li>Éventuels outils d’analyse anonymes utilisés à des fins statistiques</li>
       </ul>
       <p>
@@ -198,6 +213,7 @@
       <ul>
         <li>L’<strong>intérêt légitime</strong> du développeur à assurer le bon fonctionnement et la maintenance de l’application ;</li>
         <li>Le <strong>consentement</strong> de l’utilisateur pour l’affichage de publicités personnalisées, conformément aux règles de Google AdMob et au RGPD.</li>
+        <li>Le traitement à des fins de diagnostic et de stabilité est fondé sur l’<strong>intérêt légitime</strong> du développeur.</li>
       </ul>
     </section>
 
