@@ -83,7 +83,7 @@
       <div class="flex items-baseline gap-2">
         <span class="font-display text-2xl tracking-wide">Tom <span class="text-sauge">&amp;</span> Mélanie</span>
       </div>
-      <span class="hidden sm:inline text-xs uppercase tracking-[0.2em] text-encre/50">11 — 14 juin 2027</span>
+      <span class="hidden sm:inline text-xs uppercase tracking-[0.2em] text-encre/50">22 — 25 avril 2027</span>
     </div>
   </header>
 
@@ -126,11 +126,14 @@
             Tenue de rigueur
           </p>
           <ul class="space-y-1 leading-relaxed">
-            <li>— Mairie : pas de noir, pas de blanc.</li>
-            <li>— Cérémonie &amp; repas du soir : pas de blanc, beige/écru, noir ou vert — sauf tenue imposée, précisée pour certain·es dans le déroulé ci-dessous.</li>
+            <li>— Mairie : pas de noir, pas de blanc ou de beige/écru,.</li>
+            <li>— Cérémonie &amp; repas du soir : pas de blanc, beige/écru, noir ou vert — sauf couleur de tenue imposée, précisée pour certain·es dans le déroulé ci-dessous.</li>
             <li>— Brunch : tenue blanche obligatoire, pour tout le monde.</li>
           </ul>
         </section>
+
+        <br/>TODO: rajouter info pour ceux qui dorment genre il y a une salle de bain et des serviette genre ?
+        TODO: Mettre plus en avant la couleur imposée des tenues
 
         <!-- Un bloc par groupe de personnes partageant exactement
              le même programme (mêmes événements, mêmes nuits, même chambre) -->
@@ -147,6 +150,7 @@
               <template x-if="group.room">
                 <span class="ml-auto px-3 py-1 rounded-full bg-lilas/60 text-sm flex items-center gap-1.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v11m0-4h18m0 4V10a2 2 0 00-2-2h-7a2 2 0 00-2 2v4M3 7l4-4h9l4 4"/></svg>
+                  Chambre : 
                   <span x-text="group.room"></span>
                 </span>
               </template>
@@ -160,57 +164,59 @@
                  ================================================== -->
             <ol class="relative">
               <template x-for="(step, idx) in group.timeline" :key="step.key">
-                <li class="relative pl-9 sm:pl-11" :class="idx !== group.timeline.length - 1 ? 'pb-7' : ''">
+                <template x-if="step.active">
+                  <li class="relative pl-9 sm:pl-11" :class="idx !== group.timeline.length - 1 ? 'pb-7' : ''">
 
-                  <!-- trait vertical reliant les étapes -->
-                  <span x-show="idx !== group.timeline.length - 1"
-                        class="absolute left-[11px] sm:left-[13px] top-6 bottom-0 w-px"
-                        :class="step.active ? 'bg-sauge' : 'bg-gris'"></span>
+                    <!-- trait vertical reliant les étapes -->
+                    <span x-show="idx !== group.timeline.length - 1 && group.timeline[idx+1].active"
+                          class="absolute left-[11px] sm:left-[13px] top-6 bottom-0 w-px"
+                          :class="step.active ? 'bg-sauge' : 'bg-gris'"></span>
 
-                  <!-- pastille -->
-                  <span class="absolute left-0 top-0.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center border-2"
-                        :class="step.active
-                          ? 'bg-sauge border-sauge text-white'
-                          : 'bg-creme border-gris text-gris'">
-                    <svg x-show="step.active" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
-                  </span>
+                    <!-- pastille -->
+                    <span class="absolute left-0 top-0.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center border-2"
+                          :class="step.active
+                            ? 'bg-sauge border-sauge text-white'
+                            : 'bg-creme border-gris text-gris'">
+                      <svg x-show="step.active" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </span>
 
-                  <div :class="step.active ? '' : 'opacity-45'">
-                    <p class="font-display text-xl leading-tight" x-text="step.label"></p>
-                    <p class="text-xs uppercase tracking-wide text-encre/50 mt-0.5">
-                      <span x-text="step.day"></span> · <span x-text="step.time"></span>
-                    </p>
-                    <p class="text-sm text-encre/70 mt-1" x-text="step.desc"></p>
+                    <div :class="step.active ? '' : 'opacity-45'">
+                      <p class="font-display text-xl leading-tight" x-text="step.label"></p>
+                      <p class="text-xs uppercase tracking-wide text-encre/50 mt-0.5">
+                        <span x-text="step.day"></span> · <span x-text="step.time"></span>
+                      </p>
+                      <p class="text-sm text-encre/70 mt-1" x-text="step.desc"></p>
 
-                    <!-- règle de tenue pour cette étape -->
-                    <template x-if="step.active && step.dressRule">
-                      <div class="mt-2.5 flex items-start gap-1.5 text-xs text-encre/60">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>
-                        <div>
-                          <span x-text="step.dressRule"></span>
-                          <template x-if="step.dressOverrides.length">
-                            <div class="mt-1.5 flex flex-wrap gap-1.5">
-                              <template x-for="o in step.dressOverrides" :key="o.prenom + o.nom">
-                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white border border-gris/70">
-                                  <span class="w-2.5 h-2.5 rounded-full border border-encre/20 shrink-0" :style="'background:' + o.color"></span>
-                                  <span x-text="o.prenom + ' : tenue imposée'"></span>
-                                </span>
-                              </template>
-                            </div>
-                          </template>
+                      <!-- règle de tenue pour cette étape -->
+                      <template x-if="step.active && step.dressRule">
+                        <div class="mt-2.5 flex items-start gap-1.5 text-xs text-encre/60">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>
+                          <div>
+                            <span x-text="step.dressRule"></span>
+                            <template x-if="step.dressOverrides.length">
+                              <div class="mt-1.5 flex flex-wrap gap-1.5">
+                                <template x-for="o in step.dressOverrides" :key="o.prenom + o.nom">
+                                  <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white border border-gris/70">
+                                    <span class="w-2.5 h-2.5 rounded-full border border-encre/20 shrink-0" :style="'background:' + o.color"></span>
+                                    <span x-text="o.prenom + ' : couleur imposée'"></span>
+                                  </span>
+                                </template>
+                              </div>
+                            </template>
+                          </div>
                         </div>
+                      </template>
+                    </div>
+
+                    <!-- indicateur de nuitée entre deux étapes -->
+                    <template x-if="step.nightAfter && step.nightAfter.active">
+                      <div class="mt-3 flex items-center gap-2 text-xs text-encre/60">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" :class="step.nightAfter.active ? 'text-sauge-dark' : 'text-gris'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a8.997 8.997 0 008.354-5.646z"/></svg>
+                        <span :class="step.nightAfter.active ? 'text-encre' : 'text-encre/40 line-through'" x-text="step.nightAfter.label"></span>
                       </div>
                     </template>
-                  </div>
-
-                  <!-- indicateur de nuitée entre deux étapes -->
-                  <template x-if="step.nightAfter">
-                    <div class="mt-3 flex items-center gap-2 text-xs text-encre/60">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" :class="step.nightAfter.active ? 'text-sauge-dark' : 'text-gris'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a8.997 8.997 0 008.354-5.646z"/></svg>
-                      <span :class="step.nightAfter.active ? 'text-encre' : 'text-encre/40 line-through'" x-text="step.nightAfter.label"></span>
-                    </div>
-                  </template>
-                </li>
+                  </li>
+                </template>
               </template>
             </ol>
 
@@ -225,7 +231,7 @@
                     <template x-if="p.dressCode">
                       <span class="w-3 h-3 rounded-full border border-encre/20 shrink-0"
                             :style="'background:' + p.dressCode"
-                            :title="'Tenue imposée : ' + p.dressCode"></span>
+                            :title="'Couleur imposée : ' + p.dressCode"></span>
                     </template>
                     <span class="text-xs px-2 py-0.5 rounded-full"
                           :class="{
@@ -288,19 +294,19 @@ function guestApp(){
     // Les événements possibles, dans leur ordre chronologique réel.
     // C'est cette liste qui pilote l'ordre affiché dans la timeline.
     EVENTS: [
-      { key: 'jeudi',      label: 'Le jeudi',                        day: 'Jeudi 10 juin',    time: 'Journée libre', desc: "Arrivée et retrouvailles autour d'un verre." },
-      { key: 'mairie',     label: 'La mairie',                       day: 'Vendredi 11 juin', time: '11h00',          desc: 'Cérémonie civile, en petit comité.' },
-      { key: 'ceremonie',  label: 'Cérémonie laïque & vin d\'honneur',day: 'Samedi 12 juin',   time: '15h30',          desc: 'La cérémonie, suivie du vin d\'honneur.' },
-      { key: 'repas',      label: 'Repas du soir',                   day: 'Samedi 12 juin',   time: '20h00',          desc: 'Dîner assis puis soirée dansante.' },
-      { key: 'brunch',     label: 'Brunch',                          day: 'Dimanche 13 juin', time: '10h30',          desc: 'Brunch de clôture avant les au revoir.' },
+      { key: 'jeudi',      label: 'Le jeudi',                        day: 'Jeudi 22 avril',    time: 'À partir de 17h', desc: "Arrivée et on s'amuse au domaine ! (et on commence à préparer quand même)" },
+      { key: 'mairie',     label: 'La mairie',                       day: 'Vendredi 23 avril', time: '16h00',          desc: 'Cérémonie civile, en petit comité.' },
+      { key: 'ceremonie',  label: 'Cérémonie laïque & vin d\'honneur',day: 'Samedi 24 avril',   time: '15h00',          desc: 'La cérémonie, suivie du vin d\'honneur.' },
+      { key: 'repas',      label: 'Repas du soir',                   day: 'Samedi 24 avril',   time: '20h00',          desc: 'Dîner assis puis soirée dansante.' },
+      { key: 'brunch',     label: 'Brunch',                          day: 'Dimanche 25 avril', time: '10h00',          desc: 'Brunch de clôture avant les au revoir.' },
     ],
 
     // Les nuitées possibles, positionnées "après" l'événement du jour
     // correspondant — sert à les glisser au bon endroit dans la timeline.
     NIGHTS: [
-      { key: 'jeu-ven', label: 'Nuit de jeudi à vendredi',   after: 'jeudi'     },
-      { key: 'ven-sam', label: 'Nuit de vendredi à samedi',  after: 'mairie'    },
-      { key: 'sam-dim', label: 'Nuit de samedi à dimanche',  after: 'repas'     },
+      { key: 'jeu-ven', label: 'Nuit au domaine de jeudi à vendredi',   after: 'jeudi'     },
+      { key: 'ven-sam', label: 'Nuit au domaine de vendredi à samedi',  after: 'mairie'    },
+      { key: 'sam-dim', label: 'Nuit au domaine de samedi à dimanche',  after: 'repas'     },
     ],
 
     // Règles de tenue par événement. `overridable` indique si une
@@ -308,7 +314,7 @@ function guestApp(){
     // sur la personne, en hexadécimal) est exemptée de la règle
     // générale pour cet événement.
     DRESS_RULES: {
-      mairie:    { text: "Merci d'éviter le noir et le blanc.",                        overridable: true  },
+      mairie:    { text: "Merci d'éviter le blanc, le beige/écru et le noir.", overridable: true  },
       ceremonie: { text: 'Merci d\'éviter le blanc, le beige/écru, le noir et le vert.', overridable: true  },
       repas:     { text: 'Merci d\'éviter le blanc, le beige/écru, le noir et le vert.', overridable: true  },
       brunch:    { text: 'Tenue blanche obligatoire, pour tout le monde.',              overridable: false },
@@ -318,205 +324,205 @@ function guestApp(){
     //  JEU DE DONNÉES
     // ============================================================
     GUESTS: {
-      "AQK2F": {
-        "persons": [
-          {
-            "id": "p1",
-            "prenom": "Poue",
-            "nom": "Befieux",
-            "events": [
-              "jeudi",
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [
-              "jeu-ven",
-              "ven-sam",
-              "sam-dim"
-            ],
-            "room": "nuptiale",
-            "rsvp": "yes",
-            "dressCode": "#ffffff"
-          },
-          {
-            "id": "p2",
-            "prenom": "Pou",
-            "nom": "Befieux",
-            "events": [
-              "jeudi",
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [
-              "sam-dim",
-              "ven-sam",
-              "jeu-ven"
-            ],
-            "room": "nuptiale",
-            "rsvp": "yes",
-            "dressCode": "#6e9957"
-          }
-        ]
+  "AQK2F": {
+    "persons": [
+      {
+        "id": "p1",
+        "prenom": "Poue",
+        "nom": "Befieux",
+        "events": [
+          "jeudi",
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "jeu-ven",
+          "ven-sam",
+          "sam-dim"
+        ],
+        "room": "nuptiale",
+        "rsvp": "yes",
+        "dressCode": "#ffffff"
       },
-      "CXKP7": {
-        "persons": [
-          {
-            "id": "p3",
-            "prenom": "Corinne",
-            "nom": "Cloez",
-            "events": [
-              "mairie",
-              "ceremonie"
-            ],
-            "nights": [
-              "sam-dim"
-            ],
-            "room": "temp",
-            "rsvp": null
-          },
-          {
-            "id": "p4",
-            "prenom": "Gilles",
-            "nom": "Croci",
-            "events": [
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [
-              "sam-dim"
-            ],
-            "room": "temp",
-            "rsvp": null
-          }
-        ]
-      },
-      "R332Q": {
-        "persons": [
-          {
-            "id": "p5",
-            "prenom": "Jean-Jacques",
-            "nom": "Befieux",
-            "events": [
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [
-              "sam-dim"
-            ],
-            "room": "temp",
-            "rsvp": null
-          }
-        ]
-      },
-      "BHW6Y": {
-        "persons": [
-          {
-            "id": "p6",
-            "prenom": "Monique",
-            "nom": "",
-            "events": [
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [],
-            "room": null,
-            "rsvp": null
-          },
-          {
-            "id": "p7",
-            "prenom": "Pierre",
-            "nom": "",
-            "events": [
-              "ceremonie",
-              "repas"
-            ],
-            "nights": [],
-            "room": null,
-            "rsvp": null
-          }
-        ]
-      },
-      "WUX2H": {
-        "persons": [
-          {
-            "id": "p8",
-            "prenom": "René",
-            "nom": "Cloez",
-            "events": [
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [],
-            "room": null,
-            "rsvp": null
-          },
-          {
-            "id": "p9",
-            "prenom": "Raymonde",
-            "nom": "Ferrero",
-            "events": [
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [],
-            "room": null,
-            "rsvp": null
-          }
-        ]
-      },
-      "76HJ4": {
-        "persons": [
-          {
-            "id": "p10",
-            "prenom": "Stéphane",
-            "nom": "Cloez",
-            "events": [
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [
-              "sam-dim",
-              "ven-sam"
-            ],
-            "room": "temp",
-            "rsvp": null
-          },
-          {
-            "id": "p11",
-            "prenom": "Sylvain",
-            "nom": "Dupuis",
-            "events": [
-              "mairie",
-              "ceremonie",
-              "repas",
-              "brunch"
-            ],
-            "nights": [
-              "sam-dim",
-              "ven-sam"
-            ],
-            "room": "temp",
-            "rsvp": null
-          }
-        ]
+      {
+        "id": "p2",
+        "prenom": "Pou",
+        "nom": "Befieux",
+        "events": [
+          "jeudi",
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim",
+          "ven-sam",
+          "jeu-ven"
+        ],
+        "room": "nuptiale",
+        "rsvp": "yes",
+        "dressCode": "#6e9957"
       }
-    },
+    ]
+  },
+  "CXKP7": {
+    "persons": [
+      {
+        "id": "p3",
+        "prenom": "Corinne",
+        "nom": "Cloez",
+        "events": [
+          "mairie",
+          "ceremonie"
+        ],
+        "nights": [
+          "sam-dim"
+        ],
+        "room": "temp",
+        "rsvp": null
+      },
+      {
+        "id": "p4",
+        "prenom": "Gilles",
+        "nom": "Croci",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim"
+        ],
+        "room": "temp",
+        "rsvp": null
+      }
+    ]
+  },
+  "R332Q": {
+    "persons": [
+      {
+        "id": "p5",
+        "prenom": "Jean-Jacques",
+        "nom": "Befieux",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim"
+        ],
+        "room": "temp",
+        "rsvp": null
+      }
+    ]
+  },
+  "BHW6Y": {
+    "persons": [
+      {
+        "id": "p6",
+        "prenom": "Monique",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": null
+      },
+      {
+        "id": "p7",
+        "prenom": "Pierre",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": null
+      }
+    ]
+  },
+  "WUX2H": {
+    "persons": [
+      {
+        "id": "p8",
+        "prenom": "Papi",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": null
+      },
+      {
+        "id": "p9",
+        "prenom": "Raymonde",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": null
+      }
+    ]
+  },
+  "76HJ4": {
+    "persons": [
+      {
+        "id": "p10",
+        "prenom": "Stéphane",
+        "nom": "Cloez",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim",
+          "ven-sam"
+        ],
+        "room": "temp",
+        "rsvp": null
+      },
+      {
+        "id": "p11",
+        "prenom": "Sylvain",
+        "nom": "Dupuis",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim",
+          "ven-sam"
+        ],
+        "room": "temp",
+        "rsvp": null
+      }
+    ]
+  }
+},
 
     // ============================================================
     //  ÉTAT
