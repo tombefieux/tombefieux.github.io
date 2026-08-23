@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notre mariage — Votre invitation</title>
+
+<!-- Polices : une serif élégante pour les titres, une sans-serif discrète pour le reste -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Karla:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  // ============================================================
+  //  THEME — toute la palette et les tokens visuels sont ici.
+  //  Pour changer l'identité graphique du site, ne toucher QUE
+  //  cet objet (et les variables CSS juste en dessous).
+  // ============================================================
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          sauge:  { DEFAULT: '#6e9957', dark: '#587b45', light: '#8bb072' },
+          creme:  { DEFAULT: '#f5f0d7', dark: '#ece4c2' },
+          gris:   { DEFAULT: '#c9c7bb', dark: '#a8a698' },
+          lilas:  { DEFAULT: '#ebd8e8', dark: '#dcbdd8' },
+          bleu:   { DEFAULT: '#b8d2de', dark: '#9abccb' },
+          encre:  '#3f3c33', // texte principal, dérivé sobre du gris/creme
+        },
+        fontFamily: {
+          display: ['"Cormorant Garamond"', 'serif'],
+          body: ['Karla', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<!-- Alpine.js -->
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+<style>
+  /* Variables CSS miroir du thème Tailwind, utiles pour les éléments
+     qu'on ne peut pas styler proprement en classes utilitaires
+     (traits de timeline, focus visible, etc.) */
+  :root{
+    --sauge: #6e9957;
+    --creme: #f5f0d7;
+    --gris:  #c9c7bb;
+    --lilas: #ebd8e8;
+    --bleu:  #b8d2de;
+    --encre: #3f3c33;
+  }
+  body{ font-family: 'Karla', sans-serif; }
+  .font-display{ font-family: 'Cormorant Garamond', serif; }
+
+  /* focus clavier visible, sobre, dans la teinte sauge */
+  :focus-visible{
+    outline: 2px solid var(--sauge);
+    outline-offset: 2px;
+  }
+
+  /* transition douce par défaut sur les éléments interactifs */
+  button, a { transition: all .15s ease; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+
+<body class="bg-creme text-encre min-h-screen antialiased">
+
+<div x-data="guestApp()" x-init="init()" class="min-h-screen flex flex-col">
+
+  <!-- ============================================================
+       EN-TÊTE
+       ============================================================ -->
+  <header class="border-b border-gris/60 bg-creme/95 backdrop-blur sticky top-0 z-10">
+    <div class="max-w-3xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div class="flex items-baseline gap-2">
+        <span class="font-display text-2xl tracking-wide">Tom <span class="text-sauge">&amp;</span> Mélanie</span>
+      </div>
+      <span class="hidden sm:inline text-xs uppercase tracking-[0.2em] text-encre/50">11 — 14 juin 2027</span>
+    </div>
+  </header>
+
+  <main class="flex-1 max-w-3xl mx-auto w-full px-6 py-10 sm:py-14">
+
+    <!-- ============================================================
+         CAS 1 : identifiant absent ou inconnu
+         ============================================================ -->
+    <template x-if="!entry">
+      <section class="text-center py-10">
+        <h1 class="font-display text-3xl sm:text-4xl mb-3">Invitation introuvable</h1>
+        <p class="text-encre/70 max-w-md mx-auto leading-relaxed">
+          Le lien que vous avez utilisé ne correspond à aucune invitation connue.
+          Vérifiez le QR code de votre faire-part, ou contactez-nous directement.
+        </p>
+      </section>
+    </template>
+
+    <!-- ============================================================
+         CAS 2 : identifiant valide → récapitulatif de l'invitation
+         ============================================================ -->
+    <template x-if="entry">
+      <div class="space-y-10">
+
+        <!-- Salutation -->
+        <section class="text-center">
+          <p class="uppercase tracking-[0.2em] text-xs text-sauge-dark mb-2">Votre invitation</p>
+          <h1 class="font-display text-3xl sm:text-4xl leading-snug">
+            Bonjour <span x-text="entry.persons.map(p => p.prenom).join(', ')"></span>
+          </h1>
+          <p class="text-encre/60 mt-2 text-sm">
+            Voici le déroulé de ce à quoi vous êtes convié·es.
+          </p>
+        </section>
+
+        <!-- Synthèse générale des règles de tenue -->
+        <section class="bg-lilas/30 border border-gris/60 rounded-2xl px-5 py-4 text-sm text-encre/80">
+          <p class="font-medium text-encre mb-2 flex items-center gap-1.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-encre/60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>
+            Tenue de rigueur
+          </p>
+          <ul class="space-y-1 leading-relaxed">
+            <li>— Mairie : pas de noir, pas de blanc.</li>
+            <li>— Cérémonie &amp; repas du soir : pas de blanc, beige/écru, noir ou vert — sauf tenue imposée, précisée pour certain·es dans le déroulé ci-dessous.</li>
+            <li>— Brunch : tenue blanche obligatoire, pour tout le monde.</li>
+          </ul>
+        </section>
+
+        <!-- Un bloc par groupe de personnes partageant exactement
+             le même programme (mêmes événements, mêmes nuits, même chambre) -->
+        <template x-for="group in personGroups" :key="group.key">
+          <section class="bg-white/60 border border-gris/70 rounded-2xl p-5 sm:p-7">
+
+            <!-- Noms des personnes concernées par ce programme -->
+            <div class="flex flex-wrap items-center gap-2 mb-6">
+              <template x-for="p in group.persons" :key="p.id">
+                <span class="px-3 py-1 rounded-full bg-bleu/50 text-sm font-medium">
+                  <span x-text="p.prenom + ' ' + p.nom"></span>
+                </span>
+              </template>
+              <template x-if="group.room">
+                <span class="ml-auto px-3 py-1 rounded-full bg-lilas/60 text-sm flex items-center gap-1.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v11m0-4h18m0 4V10a2 2 0 00-2-2h-7a2 2 0 00-2 2v4M3 7l4-4h9l4 4"/></svg>
+                  <span x-text="group.room"></span>
+                </span>
+              </template>
+            </div>
+
+            <!-- ==================================================
+                 TIMELINE — élément signature de la page.
+                 Un déroulé chronologique réel (jeudi → dimanche),
+                 chaque étape active ou non selon le programme,
+                 avec les nuitées indiquées entre les étapes.
+                 ================================================== -->
+            <ol class="relative">
+              <template x-for="(step, idx) in group.timeline" :key="step.key">
+                <li class="relative pl-9 sm:pl-11" :class="idx !== group.timeline.length - 1 ? 'pb-7' : ''">
+
+                  <!-- trait vertical reliant les étapes -->
+                  <span x-show="idx !== group.timeline.length - 1"
+                        class="absolute left-[11px] sm:left-[13px] top-6 bottom-0 w-px"
+                        :class="step.active ? 'bg-sauge' : 'bg-gris'"></span>
+
+                  <!-- pastille -->
+                  <span class="absolute left-0 top-0.5 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center border-2"
+                        :class="step.active
+                          ? 'bg-sauge border-sauge text-white'
+                          : 'bg-creme border-gris text-gris'">
+                    <svg x-show="step.active" xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                  </span>
+
+                  <div :class="step.active ? '' : 'opacity-45'">
+                    <p class="font-display text-xl leading-tight" x-text="step.label"></p>
+                    <p class="text-xs uppercase tracking-wide text-encre/50 mt-0.5">
+                      <span x-text="step.day"></span> · <span x-text="step.time"></span>
+                    </p>
+                    <p class="text-sm text-encre/70 mt-1" x-text="step.desc"></p>
+
+                    <!-- règle de tenue pour cette étape -->
+                    <template x-if="step.active && step.dressRule">
+                      <div class="mt-2.5 flex items-start gap-1.5 text-xs text-encre/60">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.38 3.46L16 2a4 4 0 01-8 0L3.62 3.46a2 2 0 00-1.34 2.23l.58 3.47a1 1 0 00.99.84H6v10a2 2 0 002 2h8a2 2 0 002-2V10h2.15a1 1 0 00.99-.84l.58-3.47a2 2 0 00-1.34-2.23z"/></svg>
+                        <div>
+                          <span x-text="step.dressRule"></span>
+                          <template x-if="step.dressOverrides.length">
+                            <div class="mt-1.5 flex flex-wrap gap-1.5">
+                              <template x-for="o in step.dressOverrides" :key="o.prenom + o.nom">
+                                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white border border-gris/70">
+                                  <span class="w-2.5 h-2.5 rounded-full border border-encre/20 shrink-0" :style="'background:' + o.color"></span>
+                                  <span x-text="o.prenom + ' : tenue imposée'"></span>
+                                </span>
+                              </template>
+                            </div>
+                          </template>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+
+                  <!-- indicateur de nuitée entre deux étapes -->
+                  <template x-if="step.nightAfter">
+                    <div class="mt-3 flex items-center gap-2 text-xs text-encre/60">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" :class="step.nightAfter.active ? 'text-sauge-dark' : 'text-gris'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a8.997 8.997 0 008.354-5.646z"/></svg>
+                      <span :class="step.nightAfter.active ? 'text-encre' : 'text-encre/40 line-through'" x-text="step.nightAfter.label"></span>
+                    </div>
+                  </template>
+                </li>
+              </template>
+            </ol>
+
+            <!-- ==================================================
+                 RÉPONSES — une carte par personne du groupe
+                 ================================================== -->
+            <div class="mt-8 pt-6 border-t border-gris/60 space-y-3">
+              <template x-for="p in group.persons" :key="p.id">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 bg-creme/70 rounded-xl px-4 py-3">
+                  <div class="flex-1 flex items-center gap-2">
+                    <span class="font-medium" x-text="p.prenom + ' ' + p.nom"></span>
+                    <template x-if="p.dressCode">
+                      <span class="w-3 h-3 rounded-full border border-encre/20 shrink-0"
+                            :style="'background:' + p.dressCode"
+                            :title="'Tenue imposée : ' + p.dressCode"></span>
+                    </template>
+                    <span class="text-xs px-2 py-0.5 rounded-full"
+                          :class="{
+                            'bg-sauge/20 text-sauge-dark': p.rsvp === 'yes',
+                            'bg-gris/40 text-encre/60': p.rsvp === 'no',
+                            'bg-lilas/60 text-encre/70': !p.rsvp
+                          }"
+                          x-text="p.rsvp === 'yes' ? 'Présent·e' : p.rsvp === 'no' ? 'Absent·e' : 'En attente de réponse'">
+                    </span>
+                  </div>
+
+                  <div class="flex gap-2 shrink-0">
+                    <button @click="setRsvp(p.id, 'yes')"
+                      class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
+                      :class="p.rsvp === 'yes'
+                        ? 'bg-sauge text-white border-sauge'
+                        : 'bg-white border-gris text-encre/70 hover:border-sauge hover:text-sauge-dark'">
+                      Je viens
+                    </button>
+                    <button @click="setRsvp(p.id, 'no')"
+                      class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
+                      :class="p.rsvp === 'no'
+                        ? 'bg-encre text-creme border-encre'
+                        : 'bg-white border-gris text-encre/70 hover:border-encre'">
+                      Je ne pourrai pas venir
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </div>
+
+          </section>
+        </template>
+
+        <!-- confirmation discrète après enregistrement -->
+        <div x-show="justSaved" x-transition x-cloak
+             class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-encre text-creme text-sm px-4 py-2.5 rounded-full shadow-lg">
+          Réponse enregistrée — merci !
+        </div>
+
+      </div>
+    </template>
+
+  </main>
+
+  <footer class="text-center text-xs text-encre/40 py-8">
+    Avec toute notre affection — Tom &amp; Mélanie
+  </footer>
+
+</div>
+
+<script>
+function guestApp(){
+  return {
+
+    // ============================================================
+    //  DONNÉES DE RÉFÉRENCE
+    // ============================================================
+
+    // Les événements possibles, dans leur ordre chronologique réel.
+    // C'est cette liste qui pilote l'ordre affiché dans la timeline.
+    EVENTS: [
+      { key: 'jeudi',      label: 'Le jeudi',                        day: 'Jeudi 10 juin',    time: 'Journée libre', desc: "Arrivée et retrouvailles autour d'un verre." },
+      { key: 'mairie',     label: 'La mairie',                       day: 'Vendredi 11 juin', time: '11h00',          desc: 'Cérémonie civile, en petit comité.' },
+      { key: 'ceremonie',  label: 'Cérémonie laïque & vin d\'honneur',day: 'Samedi 12 juin',   time: '15h30',          desc: 'La cérémonie, suivie du vin d\'honneur.' },
+      { key: 'repas',      label: 'Repas du soir',                   day: 'Samedi 12 juin',   time: '20h00',          desc: 'Dîner assis puis soirée dansante.' },
+      { key: 'brunch',     label: 'Brunch',                          day: 'Dimanche 13 juin', time: '10h30',          desc: 'Brunch de clôture avant les au revoir.' },
+    ],
+
+    // Les nuitées possibles, positionnées "après" l'événement du jour
+    // correspondant — sert à les glisser au bon endroit dans la timeline.
+    NIGHTS: [
+      { key: 'jeu-ven', label: 'Nuit de jeudi à vendredi',   after: 'jeudi'     },
+      { key: 'ven-sam', label: 'Nuit de vendredi à samedi',  after: 'mairie'    },
+      { key: 'sam-dim', label: 'Nuit de samedi à dimanche',  after: 'repas'     },
+    ],
+
+    // Règles de tenue par événement. `overridable` indique si une
+    // personne avec une couleur de tenue imposée (champ `dressCode`
+    // sur la personne, en hexadécimal) est exemptée de la règle
+    // générale pour cet événement.
+    DRESS_RULES: {
+      mairie:    { text: "Merci d'éviter le noir et le blanc.",                        overridable: true  },
+      ceremonie: { text: 'Merci d\'éviter le blanc, le beige/écru, le noir et le vert.', overridable: true  },
+      repas:     { text: 'Merci d\'éviter le blanc, le beige/écru, le noir et le vert.', overridable: true  },
+      brunch:    { text: 'Tenue blanche obligatoire, pour tout le monde.',              overridable: false },
+    },
+
+    // ============================================================
+    //  JEU DE DONNÉES
+    // ============================================================
+    GUESTS: {
+      "AQK2F": {
+        "persons": [
+          {
+            "id": "p1",
+            "prenom": "Poue",
+            "nom": "Befieux",
+            "events": [
+              "jeudi",
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [
+              "jeu-ven",
+              "ven-sam",
+              "sam-dim"
+            ],
+            "room": "nuptiale",
+            "rsvp": "yes",
+            "dressCode": "#ffffff"
+          },
+          {
+            "id": "p2",
+            "prenom": "Pou",
+            "nom": "Befieux",
+            "events": [
+              "jeudi",
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [
+              "sam-dim",
+              "ven-sam",
+              "jeu-ven"
+            ],
+            "room": "nuptiale",
+            "rsvp": "yes",
+            "dressCode": "#6e9957"
+          }
+        ]
+      },
+      "CXKP7": {
+        "persons": [
+          {
+            "id": "p3",
+            "prenom": "Corinne",
+            "nom": "Cloez",
+            "events": [
+              "mairie",
+              "ceremonie"
+            ],
+            "nights": [
+              "sam-dim"
+            ],
+            "room": "temp",
+            "rsvp": null
+          },
+          {
+            "id": "p4",
+            "prenom": "Gilles",
+            "nom": "Croci",
+            "events": [
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [
+              "sam-dim"
+            ],
+            "room": "temp",
+            "rsvp": null
+          }
+        ]
+      },
+      "R332Q": {
+        "persons": [
+          {
+            "id": "p5",
+            "prenom": "Jean-Jacques",
+            "nom": "Befieux",
+            "events": [
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [
+              "sam-dim"
+            ],
+            "room": "temp",
+            "rsvp": null
+          }
+        ]
+      },
+      "BHW6Y": {
+        "persons": [
+          {
+            "id": "p6",
+            "prenom": "Monique",
+            "nom": "",
+            "events": [
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [],
+            "room": null,
+            "rsvp": null
+          },
+          {
+            "id": "p7",
+            "prenom": "Pierre",
+            "nom": "",
+            "events": [
+              "ceremonie",
+              "repas"
+            ],
+            "nights": [],
+            "room": null,
+            "rsvp": null
+          }
+        ]
+      },
+      "WUX2H": {
+        "persons": [
+          {
+            "id": "p8",
+            "prenom": "René",
+            "nom": "Cloez",
+            "events": [
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [],
+            "room": null,
+            "rsvp": null
+          },
+          {
+            "id": "p9",
+            "prenom": "Raymonde",
+            "nom": "Ferrero",
+            "events": [
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [],
+            "room": null,
+            "rsvp": null
+          }
+        ]
+      },
+      "76HJ4": {
+        "persons": [
+          {
+            "id": "p10",
+            "prenom": "Stéphane",
+            "nom": "Cloez",
+            "events": [
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [
+              "sam-dim",
+              "ven-sam"
+            ],
+            "room": "temp",
+            "rsvp": null
+          },
+          {
+            "id": "p11",
+            "prenom": "Sylvain",
+            "nom": "Dupuis",
+            "events": [
+              "mairie",
+              "ceremonie",
+              "repas",
+              "brunch"
+            ],
+            "nights": [
+              "sam-dim",
+              "ven-sam"
+            ],
+            "room": "temp",
+            "rsvp": null
+          }
+        ]
+      }
+    },
+
+    // ============================================================
+    //  ÉTAT
+    // ============================================================
+    entry: null,        // { persons: [...] } correspondant à l'id de l'URL
+    guestId: null,
+    justSaved: false,
+
+    init(){
+      const params = new URLSearchParams(window.location.search);
+      this.guestId = (params.get('id') || '').toUpperCase();
+
+      const base = this.GUESTS[this.guestId];
+      if(!base) return; // -> template "invitation introuvable"
+
+      // On clone les données de base et on applique les réponses RSVP
+      // éventuellement déjà enregistrées localement (persistance légère
+      // côté navigateur — sur un vrai déploiement, remplacer par un appel
+      // à un backend / une feuille de calcul partagée).
+      const saved = this.loadLocalRsvp();
+      this.entry = {
+        persons: base.persons.map(p => ({
+          ...p,
+          rsvp: saved[p.id] !== undefined ? saved[p.id] : p.rsvp
+        }))
+      };
+    },
+
+    // --- persistance locale des réponses (démo, remplaçable) ---
+    loadLocalRsvp(){
+      try{
+        return JSON.parse(localStorage.getItem('rsvp_' + this.guestId)) || {};
+      }catch(e){ return {}; }
+    },
+    saveLocalRsvp(){
+      const map = {};
+      this.entry.persons.forEach(p => map[p.id] = p.rsvp);
+      localStorage.setItem('rsvp_' + this.guestId, JSON.stringify(map));
+    },
+
+    setRsvp(personId, value){
+      const person = this.entry.persons.find(p => p.id === personId);
+      if(!person) return;
+      person.rsvp = person.rsvp === value ? person.rsvp : value; // clic = choix (pas de bascule accidentelle)
+      this.saveLocalRsvp();
+      this.justSaved = true;
+      setTimeout(() => this.justSaved = false, 2000);
+    },
+
+    // ============================================================
+    //  REGROUPEMENT DES PERSONNES PAR PROGRAMME IDENTIQUE
+    //  Deux personnes partagent un bloc/timeline si elles ont
+    //  exactement les mêmes événements, les mêmes nuitées et la
+    //  même chambre.
+    // ============================================================
+    get personGroups(){
+      if(!this.entry) return [];
+
+      const groups = new Map();
+
+      this.entry.persons.forEach(p => {
+        const key = [...p.events].sort().join(',') + '|' +
+                    [...p.nights].sort().join(',') + '|' +
+                    (p.room || '');
+
+        if(!groups.has(key)){
+          groups.set(key, {
+            key,
+            room: p.room,
+            events: p.events,
+            nights: p.nights,
+            persons: [],
+          });
+        }
+        groups.get(key).persons.push(p);
+      });
+
+      // Construction de la timeline (déroulé + nuitées intercalées)
+      // pour chaque groupe, dans l'ordre chronologique de EVENTS.
+      return Array.from(groups.values()).map(group => {
+        const timeline = this.EVENTS.map(ev => {
+          const nightAfterDef = this.NIGHTS.find(n => n.after === ev.key);
+          const rule = this.DRESS_RULES[ev.key] || null;
+
+          // Personnes du groupe ayant une tenue imposée, uniquement
+          // pertinent pour les événements où la règle générale peut
+          // être exemptée (pas pour le brunch, tenue blanche pour tous).
+          const dressOverrides = (rule && rule.overridable)
+            ? group.persons.filter(p => p.dressCode).map(p => ({
+                prenom: p.prenom, nom: p.nom, color: p.dressCode
+              }))
+            : [];
+
+          return {
+            key: ev.key,
+            label: ev.label,
+            day: ev.day,
+            time: ev.time,
+            desc: ev.desc,
+            active: group.events.includes(ev.key),
+            nightAfter: nightAfterDef ? {
+              label: nightAfterDef.label,
+              active: group.nights.includes(nightAfterDef.key)
+            } : null,
+            dressRule: rule ? rule.text : null,
+            dressOverrides,
+          };
+        });
+        return { ...group, timeline };
+      });
+    },
+
+  }
+}
+</script>
+
+</body>
+</html>
