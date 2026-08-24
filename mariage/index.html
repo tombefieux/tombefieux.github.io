@@ -135,7 +135,6 @@
         <br/>TODO: rajouter info pour ceux qui dorment genre il y a une salle de bain et des serviette genre ?
         TODO: Mettre plus en avant la couleur imposée des tenues
         TODO: Mettre nos coordonées pour les détails ou questions
-        TODO: faire confirmation par événement !
 
         <!-- Un bloc par groupe de personnes partageant exactement
              le même programme (mêmes événements, mêmes nuits, même chambre) -->
@@ -223,50 +222,78 @@
             </ol>
 
             <!-- ==================================================
-                 RÉPONSES — une carte par personne du groupe
+                 RÉPONSES — une réponse par événement et par personne
                  ================================================== -->
-            <div class="mt-8 pt-6 border-t border-gris/60 space-y-3">
+            <div class="mt-8 pt-6 border-t border-gris/60 space-y-5">
+              <p class="text-sm text-encre/60">
+                Indiquez votre présence pour <strong>chaque événement</strong> auquel vous êtes convié·e,
+                puis envoyez toutes vos réponses en une seule fois.
+              </p>
+
               <template x-for="p in group.persons" :key="p.id">
-                <div class="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 bg-creme/70 rounded-xl px-4 py-3">
-                  <div class="flex-1 flex items-center gap-2">
+                <div class="bg-creme/70 rounded-xl px-4 py-4 space-y-3">
+                  <div class="flex items-center gap-2">
                     <span class="font-medium" x-text="p.prenom + ' ' + p.nom"></span>
                     <template x-if="p.dressCode">
                       <span class="w-3 h-3 rounded-full border border-encre/20 shrink-0"
                             :style="'background:' + p.dressCode"
                             :title="'Couleur imposée : ' + p.dressCode"></span>
                     </template>
-                    <span class="text-xs px-2 py-0.5 rounded-full"
-                          :class="{
-                            'bg-sauge/20 text-sauge-dark': p.rsvp === 'yes',
-                            'bg-gris/40 text-encre/60': p.rsvp === 'no',
-                            'bg-lilas/60 text-encre/70': !p.rsvp
-                          }"
-                          x-text="p.rsvp === 'yes' ? 'Présent·e' : p.rsvp === 'no' ? 'Absent·e' : 'En attente de réponse'">
-                    </span>
                   </div>
 
-                  <div class="flex gap-2 shrink-0">
-                    <button @click="setRsvp(p.id, 'yes')"
-                      class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
-                      :class="p.rsvp === 'yes'
-                        ? 'bg-sauge text-white border-sauge'
-                        : 'bg-white border-gris text-encre/70 hover:border-sauge hover:text-sauge-dark'">
-                      Je viens
-                    </button>
-                    <button @click="setRsvp(p.id, 'no')"
-                      class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
-                      :class="p.rsvp === 'no'
-                        ? 'bg-encre text-creme border-encre'
-                        : 'bg-white border-gris text-encre/70 hover:border-encre'">
-                      Je ne pourrai pas venir
-                    </button>
+                  <div class="space-y-2">
+                    <template x-for="ev in EVENTS.filter(e => p.events.includes(e.key))" :key="ev.key">
+                      <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 bg-white/70 rounded-lg px-3 py-2.5">
+                        <div class="flex-1 min-w-0">
+                          <p class="text-sm font-medium" x-text="ev.label"></p>
+                          <p class="text-xs text-encre/50" x-text="ev.day + ' · ' + ev.time"></p>
+                        </div>
+
+                        <div class="flex gap-2 shrink-0">
+                          <button type="button" @click="setRsvp(p.id, ev.key, 'yes')"
+                            class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
+                            :class="p.rsvp[ev.key] === 'yes'
+                              ? 'bg-sauge text-white border-sauge'
+                              : 'bg-white border-gris text-encre/70 hover:border-sauge hover:text-sauge-dark'">
+                            Je viens
+                          </button>
+                          <button type="button" @click="setRsvp(p.id, ev.key, 'no')"
+                            class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
+                            :class="p.rsvp[ev.key] === 'no'
+                              ? 'bg-encre text-creme border-encre'
+                              : 'bg-white border-gris text-encre/70 hover:border-encre'">
+                            Je ne pourrai pas venir
+                          </button>
+                        </div>
+                      </div>
+                    </template>
                   </div>
                 </div>
               </template>
-            </div>
 
+            </div>
           </section>
         </template>
+
+        <!-- ============================================================
+             ENVOI GLOBAL DES RÉPONSES
+             ============================================================ -->
+        <section class="bg-white/60 border border-gris/70 rounded-2xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <p class="font-medium">Vos réponses sont-elles complètes ?</p>
+            <p x-show="hasMissingRsvp" class="text-sm text-encre/60 mt-1">
+              Il reste au moins une réponse à renseigner pour une personne.
+            </p>
+            <p x-show="!hasMissingRsvp" class="text-sm text-sauge-dark mt-1">
+              Toutes les réponses ont été renseignées.
+            </p>
+          </div>
+          <button type="button" @click="submitRsvps()"
+            class="px-5 py-2.5 rounded-full bg-sauge text-white font-medium hover:bg-sauge-dark disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+            :disabled="hasMissingRsvp">
+            Envoyer mes réponses
+          </button>
+        </section>
 
         <!-- confirmation discrète après enregistrement -->
         <div x-show="justSaved" x-transition x-cloak
@@ -383,7 +410,7 @@ function guestApp(){
         "nights": [
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       },
       {
@@ -399,7 +426,7 @@ function guestApp(){
         "nights": [
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       }
     ]
@@ -419,7 +446,7 @@ function guestApp(){
         "nights": [
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       }
     ]
@@ -502,7 +529,7 @@ function guestApp(){
           "sam-dim",
           "ven-sam"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       },
       {
@@ -519,7 +546,7 @@ function guestApp(){
           "sam-dim",
           "ven-sam"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       }
     ]
@@ -542,7 +569,7 @@ function guestApp(){
           "ven-sam",
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#679051"
       },
@@ -569,7 +596,7 @@ function guestApp(){
         "nights": [
           "ven-sam"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       }
     ]
@@ -634,7 +661,7 @@ function guestApp(){
           "ven-sam",
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#6e9957"
       },
@@ -650,7 +677,7 @@ function guestApp(){
         "nights": [
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       }
     ]
@@ -710,7 +737,7 @@ function guestApp(){
           "ven-sam",
           "jeu-ven"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#6e9957"
       },
@@ -730,7 +757,7 @@ function guestApp(){
           "ven-sam",
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#6e9957"
       }
@@ -754,7 +781,7 @@ function guestApp(){
           "ven-sam",
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#6e9957"
       }
@@ -778,7 +805,7 @@ function guestApp(){
           "ven-sam",
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#6e9957"
       }
@@ -802,7 +829,7 @@ function guestApp(){
           "ven-sam",
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#6e9957"
       }
@@ -826,7 +853,7 @@ function guestApp(){
           "ven-sam",
           "jeu-ven"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#6e9957"
       },
@@ -846,7 +873,7 @@ function guestApp(){
           "ven-sam",
           "jeu-ven"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       }
     ]
@@ -869,7 +896,7 @@ function guestApp(){
           "ven-sam",
           "jeu-ven"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       }
     ]
@@ -892,7 +919,7 @@ function guestApp(){
           "ven-sam",
           "jeu-ven"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null,
         "dressCode": "#6e9957"
       },
@@ -912,7 +939,7 @@ function guestApp(){
           "ven-sam",
           "sam-dim"
         ],
-        "room": "temp",
+        "room": null,
         "rsvp": null
       }
     ]
@@ -988,7 +1015,7 @@ function guestApp(){
       this.entry = {
         persons: base.persons.map(p => ({
           ...p,
-          rsvp: saved[p.id] !== undefined ? saved[p.id] : p.rsvp
+          rsvp: this.normalizeRsvp(saved[p.id] !== undefined ? saved[p.id] : p.rsvp, p.events)
         }))
       };
     },
@@ -999,19 +1026,41 @@ function guestApp(){
         return JSON.parse(localStorage.getItem('rsvp_' + this.guestId)) || {};
       }catch(e){ return {}; }
     },
+    normalizeRsvp(value, events){
+      // Compatibilité avec les anciennes données : un RSVP global yes/no
+      // est reporté sur tous les événements auxquels la personne est invitée.
+      if(value && typeof value === 'object' && !Array.isArray(value)){
+        return { ...value };
+      }
+      const map = {};
+      events.forEach(key => map[key] = (value === 'yes' || value === 'no') ? value : null);
+      return map;
+    },
+
     saveLocalRsvp(){
       const map = {};
       this.entry.persons.forEach(p => map[p.id] = p.rsvp);
       localStorage.setItem('rsvp_' + this.guestId, JSON.stringify(map));
     },
 
-    setRsvp(personId, value){
+    setRsvp(personId, eventKey, value){
       const person = this.entry.persons.find(p => p.id === personId);
       if(!person) return;
-      person.rsvp = person.rsvp === value ? person.rsvp : value; // clic = choix (pas de bascule accidentelle)
+      person.rsvp[eventKey] = value;
+    },
+
+    get hasMissingRsvp(){
+      if(!this.entry) return false;
+      return this.entry.persons.some(p =>
+        p.events.some(eventKey => p.rsvp[eventKey] !== 'yes' && p.rsvp[eventKey] !== 'no')
+      );
+    },
+
+    submitRsvps(){
+      if(this.hasMissingRsvp) return;
       this.saveLocalRsvp();
       this.justSaved = true;
-      setTimeout(() => this.justSaved = false, 2000);
+      setTimeout(() => this.justSaved = false, 2500);
     },
 
     // ============================================================
