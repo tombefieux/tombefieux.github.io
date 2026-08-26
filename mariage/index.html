@@ -69,6 +69,37 @@
     *{ animation: none !important; transition: none !important; }
   }
 </style>
+
+<style>
+.contact-card {
+  margin: 1.5rem auto 2rem;
+  max-width: 680px;
+  padding: 1.2rem 1.4rem;
+  border-radius: 18px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(0,0,0,.08);
+  text-align: center;
+}
+.contact-card__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: .45rem;
+}
+.contact-card__text {
+  margin-bottom: .8rem;
+  opacity: .8;
+}
+.contact-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .65rem 1rem;
+}
+.contact-card__links a {
+  text-decoration: none;
+}
+</style>
+
 </head>
 
 <body class="bg-creme text-encre min-h-screen antialiased">
@@ -119,6 +150,18 @@
           </p>
         </section>
 
+        <section class="contact-card" aria-label="Coordonnées des mariés">
+          <div class="contact-card__title">Une question ? 💌</div>
+          <div class="contact-card__text">
+            N'hésitez pas à nous contacter si vous avez une question !
+          </div>
+          <div class="contact-card__links">
+            <a href="mailto:bonjour@example.com">✉️ bonjour@example.com</a>
+            <a href="tel:+33123456789">📞 01 23 45 67 89</a>
+            <a href="tel:+33612345678">📱 06 12 34 56 78</a>
+          </div>
+        </section>
+
         <!-- Synthèse générale des règles de tenue -->
         <section class="bg-lilas/30 border border-gris/60 rounded-2xl px-5 py-4 text-sm text-encre/80">
           <p class="font-medium text-encre mb-2 flex items-center gap-1.5">
@@ -134,7 +177,7 @@
 
         <br/>TODO: rajouter info pour ceux qui dorment genre il y a une salle de bain et des serviette genre ?
         TODO: Mettre plus en avant la couleur imposée des tenues
-        TODO: Mettre nos coordonées pour les détails ou questions
+        TODO: mettre addresses des événements
 
         <!-- Un bloc par groupe de personnes partageant exactement
              le même programme (mêmes événements, mêmes nuits, même chambre) -->
@@ -353,6 +396,95 @@ function guestApp(){
     //  JEU DE DONNÉES
     // ============================================================
     GUESTS: {
+  "54549": {
+    "persons": [
+      {
+        "id": "p56",
+        "prenom": "Stéphane",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      },
+      {
+        "id": "p57",
+        "prenom": "Céline",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      },
+      {
+        "id": "p58",
+        "prenom": "Mathéo",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      },
+      {
+        "id": "p59",
+        "prenom": "Andréa",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      },
+      {
+        "id": "p60",
+        "prenom": "Éléna",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
   "AQK2F": {
     "persons": [
       {
@@ -372,7 +504,13 @@ function guestApp(){
           "sam-dim"
         ],
         "room": "nuptiale",
-        "rsvp": "yes",
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#ffffff"
       },
       {
@@ -392,7 +530,13 @@ function guestApp(){
           "jeu-ven"
         ],
         "room": "nuptiale",
-        "rsvp": "yes",
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#6e9957"
       }
     ]
@@ -402,21 +546,7 @@ function guestApp(){
       {
         "id": "p3",
         "prenom": "Corinne",
-        "nom": "Cloez",
-        "events": [
-          "mairie",
-          "ceremonie"
-        ],
-        "nights": [
-          "sam-dim"
-        ],
-        "room": null,
-        "rsvp": null
-      },
-      {
-        "id": "p4",
-        "prenom": "Gilles",
-        "nom": "Croci",
+        "nom": "",
         "events": [
           "mairie",
           "ceremonie",
@@ -424,10 +554,38 @@ function guestApp(){
           "brunch"
         ],
         "nights": [
-          "sam-dim"
+          "sam-dim",
+          "ven-sam"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      },
+      {
+        "id": "p4",
+        "prenom": "Gilles",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim",
+          "ven-sam"
+        ],
+        "room": null,
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
@@ -447,7 +605,12 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
@@ -465,7 +628,12 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       },
       {
         "id": "p7",
@@ -477,7 +645,10 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
       }
     ]
   },
@@ -495,7 +666,12 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       },
       {
         "id": "p9",
@@ -509,7 +685,12 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
@@ -530,7 +711,12 @@ function guestApp(){
           "ven-sam"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       },
       {
         "id": "p11",
@@ -547,7 +733,12 @@ function guestApp(){
           "ven-sam"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
@@ -570,7 +761,13 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null,
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#679051"
       },
       {
@@ -583,21 +780,27 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
       },
       {
         "id": "p14",
         "prenom": "Gabrielle",
         "nom": "",
         "events": [
-          "mairie",
-          "ceremonie"
+          "ceremonie",
+          "repas"
         ],
         "nights": [
           "ven-sam"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
       }
     ]
   },
@@ -613,7 +816,10 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "repas": null,
+          "ceremonie": null
+        }
       },
       {
         "id": "p16",
@@ -625,7 +831,10 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
       }
     ]
   },
@@ -633,20 +842,6 @@ function guestApp(){
     "persons": [
       {
         "id": "p17",
-        "prenom": "Marraine",
-        "nom": "",
-        "events": [
-          "mairie",
-          "ceremonie",
-          "repas",
-          "brunch"
-        ],
-        "nights": [],
-        "room": null,
-        "rsvp": null
-      },
-      {
-        "id": "p18",
         "prenom": "Aleks",
         "nom": "",
         "events": [
@@ -662,11 +857,17 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null,
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#6e9957"
       },
       {
-        "id": "p19",
+        "id": "p18",
         "prenom": "Sarah",
         "nom": "",
         "events": [
@@ -678,14 +879,18 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
   "XWW85": {
     "persons": [
       {
-        "id": "p20",
+        "id": "p19",
         "prenom": "Patou",
         "nom": "",
         "events": [
@@ -694,14 +899,17 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
       }
     ]
   },
   "X73AT": {
     "persons": [
       {
-        "id": "p21",
+        "id": "p20",
         "prenom": "Julien",
         "nom": "",
         "events": [
@@ -715,14 +923,19 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
   "Y3TDM": {
     "persons": [
       {
-        "id": "p22",
+        "id": "p21",
         "prenom": "Fodé",
         "nom": "Niang",
         "events": [
@@ -738,11 +951,17 @@ function guestApp(){
           "jeu-ven"
         ],
         "room": null,
-        "rsvp": null,
-        "dressCode": "#6e9957"
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
+        "dressCode": "#f9f0d7"
       },
       {
-        "id": "p23",
+        "id": "p22",
         "prenom": "Candice",
         "nom": "Blin",
         "events": [
@@ -758,7 +977,13 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null,
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#6e9957"
       }
     ]
@@ -766,7 +991,7 @@ function guestApp(){
   "K23WY": {
     "persons": [
       {
-        "id": "p24",
+        "id": "p23",
         "prenom": "Dylan",
         "nom": "Magalhaes",
         "events": [
@@ -782,7 +1007,13 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null,
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#6e9957"
       }
     ]
@@ -790,7 +1021,7 @@ function guestApp(){
   "2XB26": {
     "persons": [
       {
-        "id": "p25",
+        "id": "p24",
         "prenom": "Swann",
         "nom": "Pont-Fay",
         "events": [
@@ -806,7 +1037,13 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null,
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#6e9957"
       }
     ]
@@ -814,8 +1051,8 @@ function guestApp(){
   "J5B8E": {
     "persons": [
       {
-        "id": "p26",
-        "prenom": "Clémence",
+        "id": "p25",
+        "prenom": "Clèm",
         "nom": "",
         "events": [
           "jeudi",
@@ -830,7 +1067,13 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null,
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#6e9957"
       }
     ]
@@ -838,7 +1081,7 @@ function guestApp(){
   "M9J9Q": {
     "persons": [
       {
-        "id": "p27",
+        "id": "p26",
         "prenom": "Florian",
         "nom": "Perret",
         "events": [
@@ -854,11 +1097,17 @@ function guestApp(){
           "jeu-ven"
         ],
         "room": null,
-        "rsvp": null,
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
         "dressCode": "#6e9957"
       },
       {
-        "id": "p28",
+        "id": "p27",
         "prenom": "Ophélie",
         "nom": "Perret",
         "events": [
@@ -874,14 +1123,20 @@ function guestApp(){
           "jeu-ven"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
   "WNBA5": {
     "persons": [
       {
-        "id": "p29",
+        "id": "p28",
         "prenom": "Lou",
         "nom": "",
         "events": [
@@ -897,22 +1152,28 @@ function guestApp(){
           "jeu-ven"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "jeudi": null,
+          "ceremonie": null,
+          "mairie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
   "6NDES": {
     "persons": [
       {
-        "id": "p30",
+        "id": "p29",
         "prenom": "Alban",
         "nom": "Jamon",
         "events": [
-          "jeudi",
           "mairie",
           "ceremonie",
           "repas",
-          "brunch"
+          "brunch",
+          "jeudi"
         ],
         "nights": [
           "sam-dim",
@@ -920,11 +1181,17 @@ function guestApp(){
           "jeu-ven"
         ],
         "room": null,
-        "rsvp": null,
-        "dressCode": "#6e9957"
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null,
+          "jeudi": null
+        },
+        "dressCode": "#fff8cc"
       },
       {
-        "id": "p31",
+        "id": "p30",
         "prenom": "Marianne",
         "nom": "Taupin",
         "events": [
@@ -940,14 +1207,20 @@ function guestApp(){
           "sam-dim"
         ],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "brunch": null,
+          "repas": null,
+          "ceremonie": null,
+          "mairie": null,
+          "jeudi": null
+        }
       }
     ]
   },
   "LVHF6": {
     "persons": [
       {
-        "id": "p32",
+        "id": "p31",
         "prenom": "Estelle",
         "nom": "",
         "events": [
@@ -957,14 +1230,18 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       }
     ]
   },
   "8DZWZ": {
     "persons": [
       {
-        "id": "p33",
+        "id": "p32",
         "prenom": "Anaïs",
         "nom": "",
         "events": [
@@ -974,10 +1251,14 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
       },
       {
-        "id": "p34",
+        "id": "p33",
         "prenom": "Hugo",
         "nom": "",
         "events": [
@@ -987,7 +1268,468 @@ function guestApp(){
         ],
         "nights": [],
         "room": null,
-        "rsvp": null
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "YY2XR": {
+    "persons": [
+      {
+        "id": "p34",
+        "prenom": "Marraine",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "2UKDE": {
+    "persons": [
+      {
+        "id": "p35",
+        "prenom": "Maud",
+        "nom": "",
+        "events": [
+          "brunch",
+          "repas",
+          "ceremonie"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "brunch": null,
+          "repas": null,
+          "ceremonie": null
+        }
+      },
+      {
+        "id": "p36",
+        "prenom": "Mickael",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "VNK9J": {
+    "persons": [
+      {
+        "id": "p37",
+        "prenom": "Sophie",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
+      }
+    ]
+  },
+  "S272J": {
+    "persons": [
+      {
+        "id": "p38",
+        "prenom": "Elsa",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
+      },
+      {
+        "id": "p39",
+        "prenom": "Copain",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
+      }
+    ]
+  },
+  "PN83U": {
+    "persons": [
+      {
+        "id": "p40",
+        "prenom": "Priscilia",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "C4FB6": {
+    "persons": [
+      {
+        "id": "p41",
+        "prenom": "Benjamin",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "ULZ9L": {
+    "persons": [
+      {
+        "id": "p42",
+        "prenom": "Alexis",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      },
+      {
+        "id": "p43",
+        "prenom": "Roxanne",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "432FD": {
+    "persons": [
+      {
+        "id": "p44",
+        "prenom": "Zacharie",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "NHG3R": {
+    "persons": [
+      {
+        "id": "p45",
+        "prenom": "Alexandre",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "7EFBX": {
+    "persons": [
+      {
+        "id": "p46",
+        "prenom": "Christophe",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
+      },
+      {
+        "id": "p47",
+        "prenom": "Copine",
+        "nom": "",
+        "events": [
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
+      }
+    ]
+  },
+  "EBRRH": {
+    "persons": [
+      {
+        "id": "p48",
+        "prenom": "Laurence",
+        "nom": "",
+        "events": [
+          "jeudi",
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "jeu-ven",
+          "ven-sam",
+          "sam-dim"
+        ],
+        "room": null,
+        "rsvp": {
+          "jeudi": null,
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        },
+        "dressCode": "#6e9957"
+      },
+      {
+        "id": "p49",
+        "prenom": "Michel",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "ven-sam",
+          "sam-dim"
+        ],
+        "room": null,
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "YMFXR": {
+    "persons": [
+      {
+        "id": "p50",
+        "prenom": "Cyril",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [
+          "ven-sam"
+        ],
+        "room": null,
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null
+        }
+      }
+    ]
+  },
+  "DZ486": {
+    "persons": [
+      {
+        "id": "p51",
+        "prenom": "Thomas",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim",
+          "ven-sam"
+        ],
+        "room": null,
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      },
+      {
+        "id": "p52",
+        "prenom": "Charlotte",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim",
+          "ven-sam"
+        ],
+        "room": null,
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      },
+      {
+        "id": "p53",
+        "prenom": "Sofia",
+        "nom": "",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas",
+          "brunch"
+        ],
+        "nights": [
+          "sam-dim",
+          "ven-sam"
+        ],
+        "room": null,
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null,
+          "brunch": null
+        }
+      }
+    ]
+  },
+  "KRHFY": {
+    "persons": [
+      {
+        "id": "p54",
+        "prenom": "Janine",
+        "nom": "Cavagna",
+        "events": [
+          "mairie",
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [
+          "ven-sam"
+        ],
+        "room": null,
+        "rsvp": {
+          "mairie": null,
+          "ceremonie": null,
+          "repas": null
+        }
+      }
+    ]
+  },
+  "2SY5A": {
+    "persons": [
+      {
+        "id": "p55",
+        "prenom": "Janine",
+        "nom": "Clavel",
+        "events": [
+          "ceremonie",
+          "repas"
+        ],
+        "nights": [],
+        "room": null,
+        "rsvp": {
+          "ceremonie": null,
+          "repas": null
+        }
       }
     ]
   }
