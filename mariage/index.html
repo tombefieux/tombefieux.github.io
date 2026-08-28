@@ -41,6 +41,9 @@
 <!-- Alpine.js -->
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 
+<!-- EmailJS : permet d'envoyer un vrai mail depuis le navigateur, sans backend -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
 <style>
   /* Variables CSS miroir du thème Tailwind, utiles pour les éléments
      qu'on ne peut pas styler proprement en classes utilitaires
@@ -335,25 +338,35 @@
               </div>
               <button type="button" @click="submitRsvps()"
                 class="px-5 py-2.5 rounded-full bg-sauge text-white font-medium hover:bg-sauge-dark disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
-                :disabled="hasMissingRsvp">
-                Envoyer mes réponses
+                :disabled="hasMissingRsvp || sending">
+                <span x-text="sending ? 'Envoi en cours…' : 'Envoyer mes réponses'"></span>
               </button>
             </div>
           </template>
 
           <template x-if="submitted">
             <div class="text-center">
-              <p class="font-medium text-sauge-dark">Merci, vos réponses ont bien été transmises !</p>
+              <template x-if="!emailError">
+                <p class="font-medium text-sauge-dark">Merci, vos réponses ont bien été transmises !</p>
+              </template>
+              <template x-if="emailError">
+                <p class="font-medium text-encre">Vos réponses sont enregistrées.</p>
+              </template>
               <p class="text-sm text-encre/60 mt-1">
                 Nous nous en occupons, vous n'avez rien d'autre à faire. Une erreur à corriger ?
                 <button type="button" @click="reopenForm()" class="underline hover:text-encre">Modifier mes réponses</button>
               </p>
-              <p class="text-xs text-encre/40 mt-4">
-                Si votre logiciel de messagerie ne s'est pas ouvert automatiquement, copiez ce texte
-                et envoyez-le nous à <a href="mailto:tom.befieux@gmail.com" class="underline">tom.befieux@gmail.com</a> :
-              </p>
-              <textarea readonly rows="3" x-text="lastMailBody" @focus="$event.target.select()"
-                class="w-full mt-2 text-xs bg-creme border border-gris/60 rounded-lg p-2 font-mono text-left"></textarea>
+              <template x-if="emailError">
+                <div>
+                  <p class="text-xs text-encre/40 mt-4">
+                    Votre logiciel de messagerie a dû s'ouvrir avec le message prêt : pensez à cliquer sur « Envoyer » dedans.
+                    S'il ne s'est pas ouvert, copiez ce texte et envoyez-le nous à
+                    <a href="mailto:tom.befieux@gmail.com" class="underline">tom.befieux@gmail.com</a> :
+                  </p>
+                  <textarea readonly rows="3" x-text="lastMailBody" @focus="$event.target.select()"
+                    class="w-full mt-2 text-xs bg-creme border border-gris/60 rounded-lg p-2 font-mono text-left"></textarea>
+                </div>
+              </template>
             </div>
           </template>
         </section>
@@ -2308,13 +2321,32 @@ function guestApp(){
     // ============================================================
     //  ÉTAT
     // ============================================================
+    // ============================================================
+    //  ENVOI DE MAIL (EmailJS) — À COMPLÉTER
+    //  service_pj3xp2n est déjà votre service Gmail. Il manque encore :
+    //  1. EMAILJS_TEMPLATE_ID : créez un modèle dans EmailJS
+    //     (Email Templates → Create New Template) relié à ce service,
+    //     avec un champ "To Email" fixé sur tom.befieux@gmail.com et,
+    //     dans le corps, les variables {{subject}} et {{message}}.
+    //     Récupérez son ID sur la page du modèle.
+    //  2. EMAILJS_PUBLIC_KEY : Account → General → Public Key, dans
+    //     votre tableau de bord EmailJS.
+    // ============================================================
+    EMAILJS_SERVICE_ID: 'service_pj3xp2n',
+    EMAILJS_TEMPLATE_ID: 'template_ppjo9fq',
+    EMAILJS_PUBLIC_KEY: 'lxN87v_ZjNqSjmI-f',
+
     entry: null,        // { persons: [...] } correspondant à l'id de l'URL
     guestId: null,
     justSaved: false,
     submitted: false,   // true une fois les réponses envoyées : verrouille le formulaire
+    sending: false,
+    emailError: false,
     lastMailBody: '',
 
     init(){
+      emailjs.init({ publicKey: this.EMAILJS_PUBLIC_KEY });
+
       const params = new URLSearchParams(window.location.search);
       this.guestId = (params.get('id') || '').toUpperCase();
 
@@ -2374,23 +2406,24 @@ function guestApp(){
       );
     },
 
-    submitRsvps(){
-      if(this.hasMissingRsvp || this.submitted) return;
+    async submitRsvps(){
+      if(this.hasMissingRsvp || this.submitted || this.sending) return;
       this.saveLocalRsvp();
-      this.sendEmail();
+      this.sending = true;
+      await this.sendEmail();
+      this.sending = false;
       this.submitted = true;
       localStorage.setItem('submitted_' + this.guestId, '1');
       this.justSaved = true;
       setTimeout(() => this.justSaved = false, 2500);
     },
 
-    // Ouvre le client mail de la personne avec un message pré-rempli
-    // résumant ses réponses. Le site étant 100% statique (pas de
-    // backend), c'est la seule façon d'« envoyer un mail » depuis le
-    // navigateur : la personne doit ensuite cliquer sur "Envoyer" dans
-    // son propre client mail. Les réponses sont ensuite reportées
-    // manuellement dans les données du site (via le back-office local).
-    sendEmail(){
+    // Envoie le mail via EmailJS (donc directement, sans que la personne
+    // ait quoi que ce soit à faire ensuite). Si ça échoue pour une
+    // raison ou une autre (config incomplète, coupure réseau...), on
+    // retombe sur l'ouverture du client mail avec le message pré-rempli,
+    // pour ne jamais perdre la réponse de la personne.
+    async sendEmail(){
       const subject = `Réponse à l'invitation — ${this.guestId}`;
       const lines = [`Faire-part : ${this.guestId}`, ''];
       this.entry.persons.forEach(p => {
@@ -2404,10 +2437,27 @@ function guestApp(){
       });
       this.lastMailBody = lines.join('\n');
 
+      const canUseEmailJS = typeof emailjs !== 'undefined';
+
+      if(canUseEmailJS){
+        try{
+          await emailjs.send(this.EMAILJS_SERVICE_ID, this.EMAILJS_TEMPLATE_ID, {
+            subject: subject,
+            message: this.lastMailBody,
+            guest_id: this.guestId,
+          });
+          this.emailError = false;
+          return;
+        }catch(err){
+          console.error('Échec de l\'envoi via EmailJS :', err);
+        }
+      }
+
+      // Repli : configuration EmailJS incomplète, ou envoi en échec.
+      this.emailError = true;
       const mailto = 'mailto:tom.befieux@gmail.com'
         + '?subject=' + encodeURIComponent(subject)
         + '&body=' + encodeURIComponent(this.lastMailBody);
-
       const a = document.createElement('a');
       a.href = mailto;
       a.click();
