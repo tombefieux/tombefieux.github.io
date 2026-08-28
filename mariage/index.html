@@ -285,22 +285,29 @@
                           <p class="text-xs text-encre/50" x-text="ev.day + ' · ' + ev.time"></p>
                         </div>
 
-                        <div class="flex gap-2 shrink-0">
-                          <button type="button" @click="setRsvp(p.id, ev.key, 'yes')"
-                            class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
-                            :class="p.rsvp[ev.key] === 'yes'
-                              ? 'bg-sauge text-white border-sauge'
-                              : 'bg-white border-gris text-encre/70 hover:border-sauge hover:text-sauge-dark'">
-                            Je viens
-                          </button>
-                          <button type="button" @click="setRsvp(p.id, ev.key, 'no')"
-                            class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
-                            :class="p.rsvp[ev.key] === 'no'
-                              ? 'bg-encre text-creme border-encre'
-                              : 'bg-white border-gris text-encre/70 hover:border-encre'">
-                            Je ne pourrai pas venir
-                          </button>
-                        </div>
+                        <template x-if="!submitted">
+                          <div class="flex gap-2 shrink-0">
+                            <button type="button" @click="setRsvp(p.id, ev.key, 'yes')"
+                              class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
+                              :class="p.rsvp[ev.key] === 'yes'
+                                ? 'bg-sauge text-white border-sauge'
+                                : 'bg-white border-gris text-encre/70 hover:border-sauge hover:text-sauge-dark'">
+                              Je viens
+                            </button>
+                            <button type="button" @click="setRsvp(p.id, ev.key, 'no')"
+                              class="px-3.5 py-1.5 rounded-full text-sm font-medium border"
+                              :class="p.rsvp[ev.key] === 'no'
+                                ? 'bg-encre text-creme border-encre'
+                                : 'bg-white border-gris text-encre/70 hover:border-encre'">
+                              Je ne pourrai pas venir
+                            </button>
+                          </div>
+                        </template>
+                        <template x-if="submitted">
+                          <span class="shrink-0 text-xs px-3 py-1.5 rounded-full font-medium"
+                                :class="p.rsvp[ev.key] === 'yes' ? 'bg-sauge/20 text-sauge-dark' : 'bg-encre/10 text-encre/70'"
+                                x-text="p.rsvp[ev.key] === 'yes' ? 'Présent·e' : 'Absent·e'"></span>
+                        </template>
                       </div>
                     </template>
                   </div>
@@ -314,21 +321,41 @@
         <!-- ============================================================
              ENVOI GLOBAL DES RÉPONSES
              ============================================================ -->
-        <section class="bg-white/60 border border-gris/70 rounded-2xl p-5 sm:p-7 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <p class="font-medium">Vos réponses sont-elles complètes ?</p>
-            <p x-show="hasMissingRsvp" class="text-sm text-encre/60 mt-1">
-              Il reste au moins une réponse à renseigner pour une personne.
-            </p>
-            <p x-show="!hasMissingRsvp" class="text-sm text-sauge-dark mt-1">
-              Toutes les réponses ont été renseignées.
-            </p>
-          </div>
-          <button type="button" @click="submitRsvps()"
-            class="px-5 py-2.5 rounded-full bg-sauge text-white font-medium hover:bg-sauge-dark disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
-            :disabled="hasMissingRsvp">
-            Envoyer mes réponses
-          </button>
+        <section class="bg-white/60 border border-gris/70 rounded-2xl p-5 sm:p-7">
+          <template x-if="!submitted">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <p class="font-medium">Vos réponses sont-elles complètes ?</p>
+                <p x-show="hasMissingRsvp" class="text-sm text-encre/60 mt-1">
+                  Il reste au moins une réponse à renseigner pour une personne.
+                </p>
+                <p x-show="!hasMissingRsvp" class="text-sm text-sauge-dark mt-1">
+                  Toutes les réponses ont été renseignées.
+                </p>
+              </div>
+              <button type="button" @click="submitRsvps()"
+                class="px-5 py-2.5 rounded-full bg-sauge text-white font-medium hover:bg-sauge-dark disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+                :disabled="hasMissingRsvp">
+                Envoyer mes réponses
+              </button>
+            </div>
+          </template>
+
+          <template x-if="submitted">
+            <div class="text-center">
+              <p class="font-medium text-sauge-dark">Merci, vos réponses ont bien été transmises !</p>
+              <p class="text-sm text-encre/60 mt-1">
+                Nous nous en occupons, vous n'avez rien d'autre à faire. Une erreur à corriger ?
+                <button type="button" @click="reopenForm()" class="underline hover:text-encre">Modifier mes réponses</button>
+              </p>
+              <p class="text-xs text-encre/40 mt-4">
+                Si votre logiciel de messagerie ne s'est pas ouvert automatiquement, copiez ce texte
+                et envoyez-le nous à <a href="mailto:tom.befieux@gmail.com" class="underline">tom.befieux@gmail.com</a> :
+              </p>
+              <textarea readonly rows="3" x-text="lastMailBody" @focus="$event.target.select()"
+                class="w-full mt-2 text-xs bg-creme border border-gris/60 rounded-lg p-2 font-mono text-left"></textarea>
+            </div>
+          </template>
         </section>
 
         <!-- confirmation discrète après enregistrement -->
@@ -2284,6 +2311,8 @@ function guestApp(){
     entry: null,        // { persons: [...] } correspondant à l'id de l'URL
     guestId: null,
     justSaved: false,
+    submitted: false,   // true une fois les réponses envoyées : verrouille le formulaire
+    lastMailBody: '',
 
     init(){
       const params = new URLSearchParams(window.location.search);
@@ -2303,6 +2332,10 @@ function guestApp(){
           rsvp: this.normalizeRsvp(saved[p.id] !== undefined ? saved[p.id] : p.rsvp, p.events)
         }))
       };
+
+      // Si cette personne a déjà envoyé ses réponses sur cet appareil,
+      // le formulaire reste verrouillé pour éviter les envois en double.
+      this.submitted = localStorage.getItem('submitted_' + this.guestId) === '1';
     },
 
     // --- persistance locale des réponses (démo, remplaçable) ---
@@ -2342,10 +2375,50 @@ function guestApp(){
     },
 
     submitRsvps(){
-      if(this.hasMissingRsvp) return;
+      if(this.hasMissingRsvp || this.submitted) return;
       this.saveLocalRsvp();
+      this.sendEmail();
+      this.submitted = true;
+      localStorage.setItem('submitted_' + this.guestId, '1');
       this.justSaved = true;
       setTimeout(() => this.justSaved = false, 2500);
+    },
+
+    // Ouvre le client mail de la personne avec un message pré-rempli
+    // résumant ses réponses. Le site étant 100% statique (pas de
+    // backend), c'est la seule façon d'« envoyer un mail » depuis le
+    // navigateur : la personne doit ensuite cliquer sur "Envoyer" dans
+    // son propre client mail. Les réponses sont ensuite reportées
+    // manuellement dans les données du site (via le back-office local).
+    sendEmail(){
+      const subject = `Réponse à l'invitation — ${this.guestId}`;
+      const lines = [`Faire-part : ${this.guestId}`, ''];
+      this.entry.persons.forEach(p => {
+        lines.push(`${p.prenom}${p.nom ? ' ' + p.nom : ''} :`);
+        p.events.forEach(key => {
+          const ev = this.EVENTS.find(e => e.key === key);
+          const label = ev ? ev.label : key;
+          lines.push('  - ' + label + ' : ' + (p.rsvp[key] === 'yes' ? 'Présent·e' : 'Absent·e'));
+        });
+        lines.push('');
+      });
+      this.lastMailBody = lines.join('\n');
+
+      const mailto = 'mailto:tom.befieux@gmail.com'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(this.lastMailBody);
+
+      const a = document.createElement('a');
+      a.href = mailto;
+      a.click();
+    },
+
+    // Permet de rouvrir le formulaire en cas d'erreur à corriger,
+    // avec une confirmation explicite pour éviter les envois accidentels.
+    reopenForm(){
+      if(confirm('Vous avez déjà transmis vos réponses. Voulez-vous les modifier et nous les renvoyer ?')){
+        this.submitted = false;
+      }
     },
 
     // ============================================================
