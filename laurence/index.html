@@ -14,6 +14,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
+<!-- Icon -->
+<link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png" />
+<link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-icon-60x60.png" />
+<link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-icon-72x72.png" />
+<link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-icon-76x76.png" />
+<link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-icon-114x114.png" />
+<link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-icon-120x120.png" />
+<link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-icon-144x144.png" />
+<link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-icon-152x152.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-icon-180x180.png" />
+<link rel="icon" type="image/png" sizes="192x192"  href="/favicon/android-icon-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96x96.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+<link rel="manifest" href="/favicon/manifest.json" />
+<meta name="msapplication-TileColor" content="#ffffff" />
+<meta name="msapplication-TileImage" content="/favicon/ms-icon-144x144.png" />
+<meta name="theme-color" content="#ffffff" />
+
 <!-- Tailwind (CDN) -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
@@ -235,9 +254,11 @@
   </div>
 
   <div class="relative z-10 max-w-4xl mx-auto px-6 py-32 text-center text-paper">
-    <p class="reveal font-semibold tracking-[0.25em] text-xs sm:text-xl uppercase mb-5" style="color:var(--color-sand);">
-      Charpente · Couverture · Zinguerie · Ossature bois · Terrasse
-    </p>
+    <div class="w-screen relative left-1/2 -translate-x-1/2 flex justify-center px-4">
+      <p class="reveal font-semibold tracking-[0.15em] sm:tracking-[0.2em] xl:tracking-[0.25em] text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl uppercase whitespace-nowrap mb-5" style="color:var(--color-sand);">
+        Charpente · Couverture · Zinguerie · Ossature bois · Terrasse
+      </p>
+    </div>
     <h1 class="reveal font-display font-bold text-4xl sm:text-6xl md:text-7xl leading-[1.05] mb-6">
       Une charpente solide,<br class="hidden sm:block"> un savoir-faire familial qui dure depuis 1971.
     </h1>
@@ -282,12 +303,12 @@
     ],
     charpenteGallery: [
       { img:'images/competences/charpentes/12.jpg', label:'Fermette industrielle', type:'fermette' },
-      { img:'images/competences/charpentes/10.jpeg', label:'Fermette industrielle', type:'fermette' },
-      { img:'images/competences/charpentes/11.jpeg', label:'Fermette industrielle', type:'fermette' },
+      { img:'images/competences/charpentes/10.jpg', label:'Fermette industrielle', type:'fermette' },
+      { img:'images/competences/charpentes/11.jpg', label:'Fermette industrielle', type:'fermette' },
       { img:'images/competences/charpentes/13.jpg', label:'Fermette industrielle', type:'fermette' },
       { img:'images/competences/charpentes/1.jpg', label:'Charpente traditionnelle', type:'traditionnelle' },
-      { img:'images/competences/charpentes/2.jpeg', label:'Charpente traditionnelle — Abri terrasse', type:'traditionnelle' },
-      { img:'images/competences/charpentes/3.jpeg', label:'Charpente traditionnelle — Abri terrasse', type:'traditionnelle' },
+      { img:'images/competences/charpentes/2.jpg', label:'Charpente traditionnelle — Abri terrasse', type:'traditionnelle' },
+      { img:'images/competences/charpentes/3.jpg', label:'Charpente traditionnelle — Abri terrasse', type:'traditionnelle' },
       { img:'images/competences/charpentes/4.jpg', label:'Charpente traditionnelle sur maison ossature bois', type:'traditionnelle' },
       { img:'images/competences/charpentes/5.jpg', label:'Charpente traditionnelle pour abri', type:'traditionnelle' },
     ],
@@ -332,12 +353,19 @@
       { img:'images/competences/zinguerie/11.jpeg', label:'Zinguerie — Double bandeau noir et habillage de tête de panne' },
     ],
     ossatureGallery: [
-      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — découpe en atelier' },
-      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — panneaux préassemblés' },
-      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — montage sur chantier' },
-      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — structure en cours de levage' },
-      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — bardage extérieur' },
-      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — bâtiment achevé' },
+      { img:'images/competences/ossature/1.JPEG', label:'Ossature bois — Rehausse en ossature bois' },
+      { img:'images/competences/ossature/2.JPEG', label:'Ossature bois — Façade en joint debout' },
+      { img:'images/competences/ossature/3.JPEG', label:'Ossature bois — Façade en joint debout' },
+      { img:'images/competences/ossature/4.JPEG', label:'Ossature bois — Bardage red cedar' },
+      { img:'images/competences/ossature/5.JPEG', label:'Ossature bois — Bardage fiberdeck' },
+      { img:'images/competences/ossature/6.JPEG', label:'Ossature bois — Bardage claire voie' },
+      { img:'images/competences/ossature/7.jpg', label:'Ossature bois — Maison ossature bois bardage joint debout avec terrasse cumaru' },
+      { img:'images/competences/ossature/8.jpg', label:'Ossature bois — Maison ossature bois' },
+      { img:'images/competences/ossature/9.jpg', label:'Ossature bois — Interieur maison ossature bois' },
+      { img:'images/competences/ossature/10.jpg', label:'Ossature bois — Bardage trespa' },
+      { img:'images/competences/ossature/11.jpg', label:'Ossature bois — Bardage claire voie' },
+      { img:'images/competences/ossature/12.jpg', label:'Ossature bois — Bardage bois simonin' },
+      { img:'images/competences/ossature/13.jpg', label:'Ossature bois' },
     ],
     terrasseGallery: [
       { img:'images/competences/terrasse/1.jpeg', label:'Terrasse bois — Terrasse et banc bois' },
@@ -916,17 +944,6 @@
     ],
     realisationsGallery: [
       { img:'images/realisations/1.jpg', label:'Charpente traditionnelle', category:'charpente' },
-      { img:'images/realisations/2.jpg', label:'Couverture tuiles terre-cuite', category:'couverture' },
-      { img:'images/realisations/3.jpg', label:'Zinguerie sur mesure', category:'zinguerie' },
-      { img:'images/realisations/4.jpg', label:'Extension en ossature bois', category:'ossature' },
-      { img:'images/realisations/5.jpg', label:'Terrasse bord de piscine', category:'terrasse' },
-      { img:'images/realisations/6.jpg', label:'Rénovation de toiture', category:'couverture' },
-      { img:'images/realisations/7.jpg', label:'Charpente fermette industrielle', category:'charpente' },
-      { img:'images/realisations/8.jpg', label:'Pose de gouttières aluminium', category:'zinguerie' },
-      { img:'images/realisations/9.jpg', label:'Maison ossature bois', category:'ossature' },
-      { img:'images/realisations/10.jpg', label:'Terrasse bois exotique', category:'terrasse' },
-      { img:'images/realisations/11.jpg', label:'Charpente lamellé-collé', category:'charpente' },
-      { img:'images/realisations/12.jpg', label:'Couverture bac acier', category:'couverture' },
     ],
     get filteredGallery(){
       return this.filter === 'all'
