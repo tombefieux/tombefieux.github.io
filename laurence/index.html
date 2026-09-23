@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cavagna — Charpente, couverture, zinguerie et ossature bois depuis 1971</title>
+<meta name="description" content="CAVAGNA, entreprise de charpente, couverture et zinguerie et ossature bois depuis 1971. Certifié Qualibat RGE, garantie décennale, pour particuliers et professionnels.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="copyright" content="Tom Befieux" />
+<meta name="author" content="Tom Befieux - tom-befieux.fr" />
+
+<!-- Polices -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Tailwind (CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: 'var(--color-ink)',
+          paper: 'var(--color-paper)',
+          brick: 'var(--color-brick)',
+          burgundy: 'var(--color-burgundy)',
+          stone: 'var(--color-stone)',
+          sand: 'var(--color-sand)',
+        },
+        fontFamily: {
+          display: ['"Big Shoulders Display"', 'sans-serif'],
+          body: ['Inter', 'sans-serif'],
+        }
+      }
+    }
+  }
+</script>
+
+<!-- Alpine.js (Collapse doit être chargé avant le core) -->
+<script defer src="https://unpkg.com/@alpinejs/collapse@3.14.1/dist/cdn.min.js"></script>
+<script defer src="https://unpkg.com/alpinejs@3.14.1/dist/cdn.min.js"></script>
+
+<style>
+  :root{
+    --color-ink:       #262320;
+    --color-paper:     #F6F2EA;
+    --color-brick:     #A8433A;
+    --color-burgundy:  #5C2420;
+    --color-stone:     #9C948A;
+    --color-sand:      #D8CBB3;
+    --color-facebook:  #1877F2;
+    --shadow-tile: 0 10px 25px -8px rgba(38,35,32,0.35);
+  }
+
+  [x-cloak]{ display:none !important; }
+  .gallery-thumb{ transition: transform .3s ease; }
+  .gallery-thumb:hover{ transform: scale(1.03); }
+
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    .reveal, .tile, .card-tilt { transition:none !important; }
+  }
+
+  body{ background:var(--color-paper); color:var(--color-ink); }
+  section{ scroll-margin-top:110px; }
+  ::selection{ background:var(--color-brick); color:var(--color-paper); }
+  *:focus-visible{ outline:2px solid var(--color-brick); outline-offset:3px; border-radius:2px; }
+
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .7s cubic-bezier(.2,.7,.3,1), transform .7s cubic-bezier(.2,.7,.3,1);
+  }
+  .reveal.is-visible{ opacity:1; transform:translateY(0); }
+
+  .nav-pill{
+    background-color: rgba(246,242,234,0.65);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(216,203,179,0.6);
+    box-shadow: 0 4px 20px -10px rgba(38,35,32,.25);
+    transition: background-color .4s ease, box-shadow .4s ease, border-color .4s ease;
+  }
+  .nav-pill.scrolled{
+    background-color: rgba(246,242,234,0.92);
+    box-shadow: 0 8px 30px -12px rgba(38,35,32,.45);
+  }
+
+  .nav-link{
+    position: relative; display: inline-block; padding: .55rem .9rem;
+    font-size: .8rem; font-weight: 600; color: var(--color-ink);
+    white-space: nowrap; border-radius: 9999px;
+    transition: color .25s ease, background-color .25s ease;
+  }
+  .nav-link:hover{ background-color: var(--color-sand); }
+  .nav-link::after{
+    content: ""; position: absolute; left: .9rem; right: .9rem; bottom: .2rem;
+    height: 2px; background: var(--color-brick);
+    transform: scaleX(0); transform-origin: left; transition: transform .3s ease;
+  }
+  .nav-link.is-active::after{ transform: scaleX(1); }
+  .nav-link.is-active{ color: var(--color-brick); }
+  .nav-link-mobile{
+    padding:.75rem 1rem; font-size:.9rem; font-weight:600; color:var(--color-ink);
+    border-radius:.75rem; transition: background-color .2s ease, color .2s ease;
+  }
+  .nav-link-mobile:hover{ background-color: var(--color-sand); }
+  .nav-link-mobile.is-active{ color:var(--color-brick); background-color: rgba(216,203,179,.4); }
+
+  .roofline{
+    height:28px; width:100%;
+    background-image: url('images/icons/tuiles.png');
+    background-repeat: repeat-x; background-size: auto 100%; opacity:1;
+  }
+
+  .roof-clip{ clip-path: polygon(0 10%, 100% 0, 100% 100%, 0% 100%); }
+  .masonry{ column-gap:1rem; }
+  .masonry > *{ break-inside: avoid; margin-bottom:1rem; }
+
+  .card-tilt{ transition: transform .4s ease, box-shadow .4s ease; }
+  .card-tilt:hover{ transform: translateY(-6px); box-shadow: 0 20px 40px -18px rgba(38,35,32,.4); }
+
+  .tab-card{ cursor:pointer; }
+  .tab-card-active{ border-color: var(--color-brick) !important; box-shadow: 0 0 0 2px rgba(168,67,58,0.25); }
+  .tab-panel{ margin-top:1.5rem; background: #FFFFFF; border: 1px solid var(--color-sand); border-radius:1rem; overflow:hidden; }
+  .tab-panel-inner{ padding:2rem; color: var(--color-ink); }
+  .tab-panel-eyebrow{ font-family:'Big Shoulders Display', sans-serif; font-weight:700; font-size:1.5rem; margin-bottom:.75rem; color: var(--color-brick); }
+  .tab-panel-text{ font-size:.9rem; line-height:1.6; color: var(--color-ink); opacity:.8; margin-bottom:.85rem; }
+  .tab-panel-note{ font-size:.75rem; font-style:italic; color: var(--color-stone); margin-top:.75rem; }
+  .tab-panel-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
+  .tab-panel-list li{ position:relative; padding-left:1.1rem; font-size:.9rem; line-height:1.6; color:var(--color-ink); opacity:.8; }
+  .tab-panel-list li::before{ content:""; position:absolute; left:0; top:.55rem; width:6px; height:6px; border-radius:9999px; background:var(--color-brick); }
+  .tab-panel-list-lead{ font-weight:600; opacity:1; color:var(--color-ink); }
+
+  .construction-type-card{ background: var(--color-paper); border: 1px solid var(--color-sand); border-top: 3px solid; border-radius: .75rem; padding: .85rem 1rem; overflow: hidden; }
+  .construction-type-label{ font-family:'Big Shoulders Display', sans-serif; font-weight:700; font-size:1.05rem; color: var(--color-ink); }
+  .construction-type-desc{ font-size:.8rem; line-height:1.4; color: var(--color-ink); opacity:.7; margin-top:.1rem; }
+  .construction-type-gallery{ margin-top:1rem; padding-top:1rem; border-top:1px solid var(--color-sand); display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:.5rem; }
+  @media (min-width:640px){ .construction-type-gallery{ grid-template-columns:repeat(6, minmax(0,1fr)); } }
+
+  .material-tag{ display:inline-block; padding:.4rem .9rem; border-radius:9999px; font-size:.75rem; font-weight:600; color: var(--color-ink); background: var(--color-paper); border: 1px solid var(--color-sand); }
+
+  .field-input{ background: var(--color-paper); border:1.5px solid var(--color-sand); transition: border-color .2s ease, box-shadow .2s ease; }
+  .field-input:focus{ border-color: var(--color-brick); box-shadow: 0 0 0 3px rgba(168,67,58,0.15); outline:none; }
+
+  .map-frame{ filter:grayscale(0.85) contrast(1.05); transition:filter .5s ease; }
+  .map-frame:hover{ filter:grayscale(0); }
+
+  .social-card{ background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 1rem; padding: 1.25rem; }
+  .social-card-header{ display:flex; align-items:center; gap:.75rem; }
+  .social-icon{ width:38px; height:38px; border-radius:9999px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .social-visit{ margin-left:auto; font-size:.72rem; font-weight:600; padding:.4rem .8rem; border-radius:9999px; border:1px solid rgba(255,255,255,.25); color: var(--color-paper); white-space:nowrap; transition: background-color .25s ease, border-color .25s ease; }
+  .social-visit:hover{ background-color: rgba(255,255,255,.1); border-color: rgba(255,255,255,.4); }
+
+  .gallery-filter{ padding:.5rem 1.1rem; border-radius:9999px; font-size:.8rem; font-weight:600; color: var(--color-paper); background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); transition: background-color .25s ease, border-color .25s ease; }
+  .gallery-filter:hover{ background: rgba(255,255,255,0.12); }
+  .gallery-filter-active{ background: var(--color-brick); border-color: var(--color-brick); color: var(--color-paper); }
+
+  .video-teaser{ aspect-ratio: 16/9; background: var(--color-stone); }
+  .video-play-btn{ width:64px; height:64px; border-radius:9999px; background: var(--color-paper); display:flex; align-items:center; justify-content:center; box-shadow: 0 10px 30px -8px rgba(0,0,0,.5); transition: transform .25s ease; }
+  .video-teaser:hover .video-play-btn{ transform: scale(1.08); }
+
+  .no-scrollbar::-webkit-scrollbar{ display:none; }
+  .no-scrollbar{ -ms-overflow-style:none; scrollbar-width:none; }
+
+  /* Bandeau "aperçu" — visible uniquement dans ce fichier de démo, à retirer en prod */
+  .preview-banner{
+    background: var(--color-brick); color: var(--color-paper);
+    text-align:center; font-size:.78rem; font-weight:600;
+    padding:.5rem 1rem; position:relative; z-index:60;
+  }
+</style>
+</head>
+
+<body class="font-body antialiased">
+
+<div class="preview-banner">Aperçu statique — formulaire et données non connectés, uniquement pour visualiser le rendu et les textes</div>
+
+<!-- ============================================
+     NAVIGATION FLOTTANTE
+     ============================================ -->
+<header x-data="{ scrolled:false, mobileOpen:false }"
+        x-init="window.addEventListener('scroll', () => scrolled = window.scrollY > 40)"
+        class="fixed top-4 md:top-6 inset-x-0 z-50 flex justify-center px-4">
+
+  <div class="w-full max-w-3xl lg:max-w-4xl xl:max-w-5xl">
+    <nav aria-label="Navigation principale"
+         :class="scrolled ? 'nav-pill scrolled' : 'nav-pill'"
+         class="rounded-full flex items-center justify-between gap-3 px-3 sm:px-5 py-2">
+
+      <a href="#accueil" class="flex items-center shrink-0" @click="mobileOpen=false">
+        <img src="images/logo.png" alt="Charpentes CAVAGNA"
+            class="w-auto object-cover transition-all duration-300"
+            :class="scrolled ? 'h-9 sm:h-11' : 'h-9 sm:h-11 xl:h-[70px]'">
+      </a>
+
+      <ul class="hidden xl:flex items-center gap-1 xl:gap-2">
+        <li><a href="#accueil" data-nav="accueil" class="nav-link">Qui sommes-nous ?</a></li>
+        <li><a href="#competences" data-nav="competences" class="nav-link">Nos compétences</a></li>
+        <li><a href="#realisations" data-nav="realisations" class="nav-link">Nos réalisations</a></li>
+        <li><a href="#contact" data-nav="contact" class="nav-link">Nous contacter</a></li>
+      </ul>
+
+      <button @click="mobileOpen = !mobileOpen" aria-label="Ouvrir le menu" :aria-expanded="mobileOpen"
+              class="xl:hidden shrink-0 w-10 h-10 flex items-center justify-center rounded-full hover:bg-sand/60 transition-colors">
+        <svg class="relative" width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path x-show="!mobileOpen" d="M4 7h16M4 12h16M4 17h16" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round"/>
+          <path x-show="mobileOpen" d="M6 6l12 12M18 6L6 18" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </nav>
+
+    <div x-show="mobileOpen"
+         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0"
+         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         @click.outside="mobileOpen=false"
+         class="xl:hidden mt-2 nav-pill rounded-2xl overflow-hidden flex flex-col p-2">
+      <a href="#accueil" data-nav="accueil" @click="mobileOpen=false" class="nav-link-mobile">Qui sommes-nous ?</a>
+      <a href="#competences" data-nav="competences" @click="mobileOpen=false" class="nav-link-mobile">Nos compétences</a>
+      <a href="#realisations" data-nav="realisations" @click="mobileOpen=false" class="nav-link-mobile">Nos réalisations</a>
+      <a href="#contact" data-nav="contact" @click="mobileOpen=false" class="nav-link-mobile">Nous contacter</a>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================
+     1. QUI SOMMES-NOUS
+     ============================================ -->
+<section id="accueil" class="relative min-h-screen w-full flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0">
+    <img src="images/home.jpg" alt="" class="w-full h-full object-cover">
+    <div class="absolute inset-0" style="background: linear-gradient(180deg, rgba(38,35,32,.72) 0%, rgba(38,35,32,.6) 45%, rgba(38,35,32,.85) 100%);"></div>
+  </div>
+
+  <div class="relative z-10 max-w-4xl mx-auto px-6 py-32 text-center text-paper">
+    <p class="reveal font-semibold tracking-[0.25em] text-xs sm:text-xl uppercase mb-5" style="color:var(--color-sand);">
+      Charpente · Couverture · Zinguerie · Ossature bois · Terrasse
+    </p>
+    <h1 class="reveal font-display font-bold text-4xl sm:text-6xl md:text-7xl leading-[1.05] mb-6">
+      Une charpente solide,<br class="hidden sm:block"> un savoir-faire familial qui dure depuis 1971.
+    </h1>
+    <p class="reveal max-w-2xl mx-auto text-base sm:text-lg text-paper/85 mb-10" style="transition-delay:.1s">
+      Cavagna accompagne particuliers et professionnels dans leurs projets de charpente,
+      de couverture, de zinguerie, de maison en ossature bois et de terrasse, avec l'exigence d'un métier transmis depuis plus de cinquante ans.
+    </p>
+
+    <div class="reveal flex flex-wrap justify-center gap-3" style="transition-delay:.2s">
+      <span class="px-4 py-2 rounded-full text-sm font-medium border border-paper/30 bg-paper/10 backdrop-blur-sm">Certifié Qualibat RGE</span>
+      <span class="px-4 py-2 rounded-full text-sm font-medium border border-paper/30 bg-paper/10 backdrop-blur-sm">Assurance décennale et responsabilité civile</span>
+      <span class="px-4 py-2 rounded-full text-sm font-medium border border-paper/30 bg-paper/10 backdrop-blur-sm">Particuliers & professionnels</span>
+    </div>
+  </div>
+
+  <a href="#competences" aria-label="Découvrir nos compétences"
+     class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 text-paper/80 hover:text-paper transition-colors">
+    <svg width="22" height="34" viewBox="0 0 22 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="1" y="1" width="20" height="32" rx="10" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="11" cy="10" r="2.5" fill="currentColor"/>
+    </svg>
+  </a>
+</section>
+
+<div class="roofline"></div>
+
+<!-- ============================================
+     2. NOS COMPÉTENCES
+     ============================================ -->
+<section id="competences" class="py-24 sm:py-32 px-6 bg-paper" x-data="{
+    open: null,
+    openType: null,
+    row1: [
+      { id:'charpente',  title:'Charpente',      img:'images/charpente.jpg' },
+      { id:'couverture', title:'Couverture',     img:'images/couverture.jpg' },
+      { id:'rge',        title:'Certifié Qualibat RGE', img:'images/rge.png' },
+    ],
+    row2: [
+      { id:'zinguerie', title:'Zinguerie',     img:'images/zinguerie.jpg' },
+      { id:'ossature',  title:'Ossature bois', img:'images/ossature-bois.jpg' },
+      { id:'terrasse',  title:'Terrasse',      img:'images/terrasse.jpg' },
+    ],
+    charpenteGallery: [
+      { img:'images/competences/charpentes/12.jpg', label:'Fermette industrielle', type:'fermette' },
+      { img:'images/competences/charpentes/10.jpeg', label:'Fermette industrielle', type:'fermette' },
+      { img:'images/competences/charpentes/11.jpeg', label:'Fermette industrielle', type:'fermette' },
+      { img:'images/competences/charpentes/13.jpg', label:'Fermette industrielle', type:'fermette' },
+      { img:'images/competences/charpentes/1.jpg', label:'Charpente traditionnelle', type:'traditionnelle' },
+      { img:'images/competences/charpentes/2.jpeg', label:'Charpente traditionnelle — Abri terrasse', type:'traditionnelle' },
+      { img:'images/competences/charpentes/3.jpeg', label:'Charpente traditionnelle — Abri terrasse', type:'traditionnelle' },
+      { img:'images/competences/charpentes/4.jpg', label:'Charpente traditionnelle sur maison ossature bois', type:'traditionnelle' },
+      { img:'images/competences/charpentes/5.jpg', label:'Charpente traditionnelle pour abri', type:'traditionnelle' },
+    ],
+    couvertureTypes: [
+      {
+        id:'tuiles', title:'Tuiles',
+        desc:'Tuile béton ou tuile terre-cuite, posée avec soin pour une couverture durable et esthétique, adaptée à chaque style de bâtiment.',
+        photos:[
+          { img:'images/competences/couverture/tuiles/1.jpg', label:'Couverture tuiles — Alpha 10 rouge nuancé' },
+          { img:'images/competences/couverture/tuiles/2.jpg', label:'Couverture tuiles — Omega 10' },
+          { img:'images/competences/couverture/tuiles/3.jpg', label:'Couverture tuiles — Alpha 10' },
+          { img:'images/competences/couverture/tuiles/4.jpg', label:'Couverture tuiles — Alpha 10' },
+        ]
+      },
+      {
+        id:'joint-debout', title:'Joint debout',
+        desc:'Couverture en zinc à joint debout : une étanchéité renforcée et une finition soignée, pour les toitures qui exigent une vraie précision d\'exécution.',
+        photos:[
+          { img:'images/competences/couverture/joints/1.png', label:'Joint debout' },
+          { img:'images/competences/couverture/joints/2.jpg', label:'Joint debout — pigeonnier' },
+        ]
+      },
+      {
+        id:'bac-acier', title:'Bac acier',
+        desc:'Une solution robuste et économique, particulièrement adaptée aux bâtiments industriels, agricoles et aux grandes extensions.',
+        photos:[
+          { img:'images/competences/couverture/tuiles.jpg', label:'Bac acier — vue d\'ensemble' },
+        ]
+      },
+    ],
+    zinguerieGallery: [
+      { img:'images/competences/zinguerie/1.jpg', label:'Zinguerie — Frisette bois et zinguerie en zinc' },
+      { img:'images/competences/zinguerie/2.jpg', label:'Zinguerie — Bandeau beige, frisette beige et zinguerie beige' },
+      { img:'images/competences/zinguerie/3.jpg', label:'Zinguerie — Bandeau blanc, frisette blanche et zinguerie anthracite' },
+      { img:'images/competences/zinguerie/4.jpg', label:'Zinguerie — Zinguerie cuivre' },
+      { img:'images/competences/zinguerie/5.jpg', label:'Zinguerie — Habillage en tête de panne alu blanc' },
+      { img:'images/competences/zinguerie/6.jpg', label:'Zinguerie — Bandeau et frisette pvc blanc et zinguerie zinc' },
+      { img:'images/competences/zinguerie/7.jpg', label:'Zinguerie — Bandeau, frisette et zinguerie anthracite' },
+      { img:'images/competences/zinguerie/8.jpg', label:'Zinguerie — Frisette blanche, bandeau blanc et zinguerie blanche' },
+      { img:'images/competences/zinguerie/9.jpg', label:'Zinguerie — Bandeau pvc blanc, frisette blanc et zinguerie gris anthracite' },
+      { img:'images/competences/zinguerie/10.jpg', label:'Zinguerie — Chéneau zinc et frisette bois' },
+      { img:'images/competences/zinguerie/11.jpeg', label:'Zinguerie — Double bandeau noir et habillage de tête de panne' },
+    ],
+    ossatureGallery: [
+      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — découpe en atelier' },
+      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — panneaux préassemblés' },
+      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — montage sur chantier' },
+      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — structure en cours de levage' },
+      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — bardage extérieur' },
+      { img:'images/competences/ossature/1.jpg', label:'Ossature bois — bâtiment achevé' },
+    ],
+    terrasseGallery: [
+      { img:'images/competences/terrasse/1.jpeg', label:'Terrasse bois — Terrasse et banc bois' },
+      { img:'images/competences/terrasse/2.jpeg', label:'Terrasse bois' },
+      { img:'images/competences/terrasse/3.jpg', label:'Terrasse bois — Terrasse bois autour d\'une piscine ' },
+      { img:'images/competences/terrasse/4.jpg', label:'Terrasse bois' },
+      { img:'images/competences/terrasse/5.jpg', label:'Terrasse bois — Escaliers bois' },
+      { img:'images/competences/terrasse/6.jpg', label:'Terrasse bois — Escalier bois' },
+    ],
+    toggle(id){ this.open = (this.open === id) ? null : id; },
+    toggleType(id){ this.openType = (this.openType === id) ? null : id; },
+  }">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal text-center mb-16">
+      <p class="font-semibold tracking-[0.25em] text-xs sm:text-sm uppercase mb-3" style="color:var(--color-brick);">Notre savoir-faire</p>
+      <h2 class="font-display font-bold text-3xl sm:text-5xl">Nos compétences</h2>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-6">
+      <template x-for="item in row1" :key="item.id">
+        <div>
+          <button type="button" @click="toggle(item.id)"
+                  class="tab-card card-tilt text-left bg-white/40 rounded-2xl overflow-hidden border w-full"
+                  :class="open === item.id ? 'tab-card-active' : ''"
+                  style="border-color:var(--color-sand);">
+            <div class="relative h-48 overflow-hidden">
+              <img :src="item.img" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="w-full p-5 flex items-center justify-between gap-3">
+              <span class="font-display font-bold text-xl" x-text="item.title"></span>
+              <svg :class="open === item.id ? 'rotate-180' : ''" class="shrink-0 transition-transform duration-300" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M6 9l6 6 6-6" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="px-5 -mt-3 pb-4 text-xs uppercase tracking-wide" style="color:var(--color-stone);" x-show="open !== item.id">Cliquez pour en savoir plus</p>
+          </button>
+
+          <div x-show="open === item.id" x-collapse.duration.300ms class="tab-panel sm:hidden">
+            <div class="tab-panel-inner">
+              <p class="tab-panel-eyebrow" x-text="item.title"></p>
+
+              <template x-if="item.id === 'charpente'">
+                <div>
+                  <div class="mb-6">
+                    <p class="tab-panel-text">
+                      C'est un peu le département historique de l'entreprise, puisqu'elle a démarré en 1971 avec cette activité phare.
+                    </p>
+                    <p class="tab-panel-text">
+                      Depuis quelques années, la charpente a retrouvé ses lettres de noblesse. Ce n'est plus simplement un support
+                      de structure, mais une œuvre esthétique qui donne du volume et de l'apparence.
+                    </p>
+                    <p class="tab-panel-text">
+                      Emmené par une équipe de charpentiers jeune et dynamique, ce département est au cœur du métier de CAVAGNA.
+                      Du lotissement à la maison individuelle, en passant par la construction industrielle, en neuf ou en rénovation,
+                      la conception et la réalisation sont totalement intégrées dans un atelier spécifique (construction bois ou
+                      lamellé-collé, agrandissement de structure, restauration…), équipé de plusieurs moyens de levage (grue, manitou…)
+                      pour assurer une plus grande rapidité de montage.
+                    </p>
+                  </div>
+
+                  <div class="space-y-4">
+                    <div class="construction-type-card" style="border-top-color:var(--color-burgundy);">
+                      <button type="button" @click="toggleType('fermette')" class="w-full text-left flex items-center gap-4">
+                        <img :src="charpenteGallery.find(p => p.type === 'fermette').img" alt=""
+                            class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shrink-0">
+                        <div class="flex-1 min-w-0">
+                          <div class="flex items-center justify-between gap-2">
+                            <p class="construction-type-label" style="color:var(--color-ink);">Fermette industrielle</p>
+                            <svg :class="openType === 'fermette' ? 'rotate-180' : ''" class="shrink-0 transition-transform duration-300" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <path d="M6 9l6 6 6-6" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </div>
+                          <p class="construction-type-desc">Un format économique et de qualité, pour une mise en œuvre rapide et fiable.</p>
+                        </div>
+                      </button>
+                      <div x-show="openType === 'fermette'" x-collapse.duration.300ms>
+                        <div class="construction-type-gallery">
+                          <template x-for="(photo, idx) in charpenteGallery.filter(p => p.type === 'fermette')" :key="idx">
+                            <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                                    class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                              <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                            </button>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="construction-type-card" style="border-top-color:var(--color-burgundy);">
+                      <button type="button" @click="toggleType('traditionnelle')" class="w-full text-left flex items-center gap-4">
+                        <img :src="charpenteGallery.find(p => p.type === 'traditionnelle').img" alt=""
+                            class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shrink-0">
+                        <div class="flex-1 min-w-0">
+                          <div class="flex items-center justify-between gap-2">
+                            <p class="construction-type-label" style="color:var(--color-ink);">Traditionnelle</p>
+                            <svg :class="openType === 'traditionnelle' ? 'rotate-180' : ''" class="shrink-0 transition-transform duration-300" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <path d="M6 9l6 6 6-6" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                          </div>
+                          <p class="construction-type-desc">Des espaces plus harmonieux, laissant plus de place à l'architecture des lieux.</p>
+                        </div>
+                      </button>
+                      <div x-show="openType === 'traditionnelle'" x-collapse.duration.300ms>
+                        <div class="construction-type-gallery">
+                          <template x-for="(photo, idx) in charpenteGallery.filter(p => p.type === 'traditionnelle')" :key="idx">
+                            <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                                    class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                              <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                            </button>
+                          </template>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
+
+              <template x-if="item.id === 'couverture'">
+                <div>
+                  <div class="mb-6">
+                    <p class="tab-panel-text">
+                      Pour protéger la construction de manière durable et efficace, la couverture se doit d'avoir été étudiée
+                      au plus près. La compétence et l'expérience des collaborateurs de CAVAGNA offrent les meilleures réponses :
+                    </p>
+                    <ul class="tab-panel-list">
+                      <li><span class="tab-panel-list-lead">En construction :</span> plusieurs formes et matériaux — tuile béton, tuile terre-cuite, bac acier, couverture en zinc.</li>
+                      <li><span class="tab-panel-list-lead">En rénovation :</span> tous travaux de réfection (bandeaux, solivage…). L'équipe sait s'adapter aux différentes situations rencontrées sur les vieilles toitures (démontage, évacuation des vieilles tuiles et bois, bâchage…).</li>
+                      <li><span class="tab-panel-list-lead">En s'appuyant sur</span> les performances produits de ses fournisseurs Edilians et Terreal, CAVAGNA donne à ses clients l'assurance d'un travail de qualité, à la longévité garantie.</li>
+                    </ul>
+                  </div>
+                  <div class="grid gap-4">
+                    <template x-for="type in couvertureTypes" :key="type.id">
+                      <div class="construction-type-card" style="border-top-color:var(--color-burgundy);">
+                        <p class="construction-type-label" style="color:var(--color-ink);" x-text="type.title"></p>
+                        <p class="construction-type-desc" x-text="type.desc"></p>
+                        <div class="construction-type-gallery" style="grid-template-columns:repeat(3, minmax(0,1fr));">
+                          <template x-for="(photo, idx) in type.photos" :key="idx">
+                            <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                                    class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                              <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                            </button>
+                          </template>
+                        </div>
+                      </div>
+                    </template>
+                  </div>
+                </div>
+              </template>
+
+              <template x-if="item.id === 'rge'">
+                <div>
+                  <p class="tab-panel-text">
+                    CAVAGNA est certifiée <b>Qualibat</b> et <b>qualifiée RGE</b> (Reconnu Garant de l'Environnement), deux
+                    reconnaissances qui attestent de notre compétence, de notre sérieux et du respect d'exigences précises
+                    de savoir-faire sur nos chantiers. La qualification RGE est en plus une condition indispensable pour que
+                    vous puissiez bénéficier des aides publiques à la rénovation lors de travaux d'ampleur.
+                  </p>
+                  <ul class="tab-panel-list">
+                    <li><span class="tab-panel-list-lead">MaPrimeRénov' toiture :</span> si votre logement a plus de 15 ans et que les travaux sont réalisés par une entreprise RGE, vous pouvez être éligible à une aide de l'État pour vos travaux d'ampleur, selon vos revenus et la nature du chantier.</li>
+                    <li><span class="tab-panel-list-lead">La certification Qualibat :</span> délivrée par un organisme indépendant, elle valide la compétence technique et la solidité de l'entreprise, chantier après chantier.</li>
+                    <li><span class="tab-panel-list-lead">Un artisan RGE, un gage de qualité :</span> la certification implique des contrôles réguliers et un engagement sur la conformité des matériaux et de la mise en œuvre.</li>
+                  </ul>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <div x-show="row1.some(i => i.id === open)" x-collapse.duration.350ms class="tab-panel hidden sm:block">
+      <div class="tab-panel-inner">
+        <p class="tab-panel-eyebrow" x-text="(row1.find(i => i.id === open) || {}).title"></p>
+
+        <template x-if="open === 'charpente'">
+          <div>
+            <div class="mb-6">
+              <p class="tab-panel-text">
+                C'est un peu le département historique de l'entreprise, puisqu'elle a démarré en 1971 avec cette activité phare.
+              </p>
+              <p class="tab-panel-text">
+                Depuis quelques années, la charpente a retrouvé ses lettres de noblesse. Ce n'est plus simplement un support
+                de structure, mais une œuvre esthétique qui donne du volume et de l'apparence.
+              </p>
+              <p class="tab-panel-text">
+                Emmené par une équipe de charpentiers jeune et dynamique, ce département est au cœur du métier de CAVAGNA.
+                Du lotissement à la maison individuelle, en passant par la construction industrielle, en neuf ou en rénovation,
+                la conception et la réalisation sont totalement intégrées dans un atelier spécifique (construction bois ou
+                lamellé-collé, agrandissement de structure, restauration…), équipé de plusieurs moyens de levage (grue, manitou…)
+                pour assurer une plus grande rapidité de montage.
+              </p>
+            </div>
+            <div class="space-y-4">
+              <div class="construction-type-card" style="border-top-color:var(--color-burgundy);">
+                <button type="button" @click="toggleType('fermette')" class="w-full text-left flex items-center gap-4">
+                  <img :src="charpenteGallery.find(p => p.type === 'fermette').img" alt=""
+                      class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shrink-0">
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <p class="construction-type-label" style="color:var(--color-ink);">Fermette industrielle</p>
+                      <svg :class="openType === 'fermette' ? 'rotate-180' : ''" class="shrink-0 transition-transform duration-300" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9l6 6 6-6" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <p class="construction-type-desc">Un format économique et de qualité, pour une mise en œuvre rapide et fiable.</p>
+                  </div>
+                </button>
+                <div x-show="openType === 'fermette'" x-collapse.duration.300ms>
+                  <div class="construction-type-gallery">
+                    <template x-for="(photo, idx) in charpenteGallery.filter(p => p.type === 'fermette')" :key="idx">
+                      <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                              class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                        <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                      </button>
+                    </template>
+                  </div>
+                </div>
+              </div>
+
+              <div class="construction-type-card" style="border-top-color:var(--color-burgundy);">
+                <button type="button" @click="toggleType('traditionnelle')" class="w-full text-left flex items-center gap-4">
+                  <img :src="charpenteGallery.find(p => p.type === 'traditionnelle').img" alt=""
+                      class="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shrink-0">
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between gap-2">
+                      <p class="construction-type-label" style="color:var(--color-ink);">Traditionnelle</p>
+                      <svg :class="openType === 'traditionnelle' ? 'rotate-180' : ''" class="shrink-0 transition-transform duration-300" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 9l6 6 6-6" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                    </div>
+                    <p class="construction-type-desc">Des espaces plus harmonieux, laissant plus de place à l'architecture des lieux.</p>
+                  </div>
+                </button>
+                <div x-show="openType === 'traditionnelle'" x-collapse.duration.300ms>
+                  <div class="construction-type-gallery">
+                    <template x-for="(photo, idx) in charpenteGallery.filter(p => p.type === 'traditionnelle')" :key="idx">
+                      <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                              class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                        <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                      </button>
+                    </template>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <template x-if="open === 'couverture'">
+          <div>
+            <div class="mb-6">
+              <p class="tab-panel-text">
+                Pour protéger la construction de manière durable et efficace, la couverture se doit d'avoir été étudiée
+                au plus près. La compétence et l'expérience des collaborateurs de CAVAGNA offrent les meilleures réponses :
+              </p>
+              <ul class="tab-panel-list">
+                <li><span class="tab-panel-list-lead">En construction :</span> plusieurs formes et matériaux — tuile béton, tuile terre-cuite, bac acier, couverture en zinc.</li>
+                <li><span class="tab-panel-list-lead">En rénovation :</span> tous travaux de réfection (bandeaux, solivage…). L'équipe sait s'adapter aux différentes situations rencontrées sur les vieilles toitures (démontage, évacuation des vieilles tuiles et bois, bâchage…).</li>
+                <li><span class="tab-panel-list-lead">En s'appuyant sur les performances produits de ses fournisseurs</span> Edilians et Terreal, CAVAGNA donne à ses clients l'assurance d'un travail de qualité, à la longévité garantie.</li>
+              </ul>
+            </div>
+            <div class="grid grid-cols-3 gap-5">
+              <template x-for="type in couvertureTypes" :key="type.id">
+                <div class="construction-type-card" style="border-top-color:var(--color-burgundy);">
+                  <p class="construction-type-label" style="color:var(--color-ink);" x-text="type.title"></p>
+                  <p class="construction-type-desc" x-text="type.desc"></p>
+                  <div class="construction-type-gallery" style="grid-template-columns:repeat(3, minmax(0,1fr));">
+                    <template x-for="(photo, idx) in type.photos" :key="idx">
+                      <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                              class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                        <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                      </button>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <template x-if="open === 'rge'">
+          <div>
+            <p class="tab-panel-text">
+              CAVAGNA est certifiée <b>Qualibat</b> et <b>qualifiée RGE</b> (Reconnu Garant de l'Environnement), deux
+              reconnaissances qui attestent de notre compétence, de notre sérieux et du respect d'exigences précises
+              de savoir-faire sur nos chantiers. La qualification RGE est en plus une condition indispensable pour que
+              vous puissiez bénéficier des aides publiques à la rénovation lors de travaux d'ampleur.
+            </p>
+            <ul class="tab-panel-list">
+              <li><span class="tab-panel-list-lead">MaPrimeRénov' toiture :</span> si votre logement a plus de 15 ans et que les travaux sont réalisés par une entreprise RGE, vous pouvez être éligible à une aide de l'État pour vos travaux d'ampleur, selon vos revenus et la nature du chantier.</li>
+              <li><span class="tab-panel-list-lead">La certification Qualibat :</span> délivrée par un organisme indépendant, elle valide la compétence technique et la solidité de l'entreprise, chantier après chantier.</li>
+              <li><span class="tab-panel-list-lead">Un artisan RGE, un gage de qualité :</span> la certification implique des contrôles réguliers et un engagement sur la conformité des matériaux et de la mise en œuvre.</li>
+            </ul>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-6 mt-6">
+      <template x-for="item in row2" :key="item.id">
+        <div>
+          <button type="button" @click="toggle(item.id)"
+                  class="tab-card card-tilt text-left bg-white/40 rounded-2xl overflow-hidden border w-full"
+                  :class="open === item.id ? 'tab-card-active' : ''"
+                  style="border-color:var(--color-sand);">
+            <div class="relative h-48 overflow-hidden">
+              <img :src="item.img" alt="" class="w-full h-full object-cover">
+            </div>
+            <div class="w-full p-5 flex items-center justify-between gap-3">
+              <span class="font-display font-bold text-xl" x-text="item.title"></span>
+              <svg :class="open === item.id ? 'rotate-180' : ''" class="shrink-0 transition-transform duration-300" width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M6 9l6 6 6-6" stroke="var(--color-ink)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <p class="px-5 -mt-3 pb-4 text-xs uppercase tracking-wide" style="color:var(--color-stone);" x-show="open !== item.id">Cliquez pour en savoir plus</p>
+          </button>
+
+          <div x-show="open === item.id" x-collapse.duration.300ms class="tab-panel sm:hidden">
+            <div class="tab-panel-inner">
+              <p class="tab-panel-eyebrow" x-text="item.title"></p>
+
+              <template x-if="item.id === 'zinguerie'">
+                <div>
+                  <div class="mb-5">
+                    <p class="tab-panel-text">
+                      Complément indispensable de la toiture, la zinguerie est un métier à part entière, traité par une équipe
+                      spécialisée qui intervient sur tout type de construction ou de rénovation. Démontage, évacuation des
+                      anciens revêtements, bâchage, tout est pris en charge.
+                    </p>
+                    <p class="tab-panel-text">
+                      En travaillant avec des matériaux nobles, CAVAGNA apporte une touche esthétique et performante,
+                      sans entretien, garantissant une durabilité parfaite à l'installation réalisée.
+                    </p>
+                  </div>
+                  <div class="flex flex-wrap gap-2 mb-5">
+                    <span class="material-tag">Aluminium laqué</span>
+                    <span class="material-tag">Cuivre</span>
+                    <span class="material-tag">Zinc</span>
+                  </div>
+                  <div class="construction-type-card mb-6" style="border-top-color:var(--color-burgundy);">
+                    <p class="construction-type-label" style="color:var(--color-ink);">Partenariat Araltec</p>
+                    <p class="construction-type-desc">
+                      Pour l'aluminium laqué, nous travaillons avec Araltec, spécialiste de ce type de gouttière. La mise en
+                      œuvre se fait directement sur chantier grâce à une profileuse installée sur site, qui déroule la gouttière
+                      à la dimension exacte du bâtiment pour un ajustement parfait.
+                    </p>
+                  </div>
+                  <p class="tab-panel-note mb-3" style="opacity:.75;">Nos réalisations en zinguerie — cliquez sur une photo pour l'agrandir</p>
+                  <div class="grid grid-cols-3 gap-2">
+                    <template x-for="(photo, idx) in zinguerieGallery" :key="idx">
+                      <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                              class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                        <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                      </button>
+                    </template>
+                  </div>
+                </div>
+              </template>
+
+              <template x-if="item.id === 'ossature'">
+                <div>
+                  <div class="mb-5">
+                    <p class="tab-panel-text">
+                      Ce mode de construction est en plein développement. Performante, légère, solide, durable, esthétique,
+                      l'ossature bois offre une grande liberté de conception et s'adapte à tous les sites, en résidentiel comme
+                      en industriel, pour le neuf comme pour l'extension d'un bâtiment existant. Elle associe, dans une même
+                      épaisseur de mur, isolation et résistance structurelle.
+                    </p>
+                    <p class="tab-panel-text">
+                      Produit naturel et écologique, le bois, associé aux meilleurs composants en matière d'isolation, représente
+                      le matériau de demain. Nous proposons divers bardages massifs, pré-peints ou en composite, avec ou sans entretien.
+                    </p>
+                  </div>
+                  <div class="construction-type-card mb-6" style="border-top-color:var(--color-burgundy);">
+                    <p class="construction-type-label" style="color:var(--color-ink);">De la conception au montage, tout est fait maison</p>
+                    <p class="construction-type-desc">
+                      Chaque projet fait l'objet d'une étude particulière, en lien avec les architectes et maîtres d'oeuvre, pour adapter au mieux
+                      la performance thermique, l'esthétique et le rapport qualité/prix (choix de l'isolation, calculs de section,
+                      plans techniques…). Les murs sont ensuite découpés et fabriqués dans notre propre atelier, avant d'être
+                      assemblés et montés directement sur le chantier par nos équipes.
+                    </p>
+                  </div>
+                  <p class="tab-panel-note mb-3" style="opacity:.75;">Nos réalisations en ossature bois — cliquez sur une photo pour l'agrandir</p>
+                  <div class="grid grid-cols-3 gap-2">
+                    <template x-for="(photo, idx) in ossatureGallery" :key="idx">
+                      <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                              class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                        <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                      </button>
+                    </template>
+                  </div>
+                </div>
+              </template>
+
+              <template x-if="item.id === 'terrasse'">
+                <div>
+                  <div class="mb-5">
+                    <p class="tab-panel-text">
+                      Les terrasses deviennent aujourd'hui pratiquement une nouvelle pièce de la maison, un espace à vivre en
+                      extérieur à qui l'on demande d'être esthétique, confortable, sûr et facile à entretenir. Synonyme de
+                      détente et de convivialité, la terrasse se doit d'être parfaite, pour soi-même, et pour le plaisir de
+                      l'œil qu'elle procure aux invités.
+                    </p>
+                    <p class="tab-panel-text">
+                      Les professionnels de CAVAGNA interviennent pour proposer des solutions durables et chaleureuses
+                      (bord de piscine, aménagement extérieur de la maison, accès…). En fonction des situations, divers matériaux
+                      sont proposés :
+                    </p>
+                    <ul class="tab-panel-list">
+                      <li><span class="tab-panel-list-lead">Bois autoclave :</span> durabilité prolongée, traitement anti-insectes et anti-champignons.</li>
+                      <li><span class="tab-panel-list-lead">Bois Ipé :</span> bois exotique très résistant, l'une des essences les plus anciennes utilisées pour cette fonction.</li>
+                      <li><span class="tab-panel-list-lead">Bois Itauba :</span> un grain très fin pour une finition homogène.</li>
+                    </ul>
+                  </div>
+                  <div class="construction-type-card mb-6" style="border-top-color:var(--color-burgundy);">
+                    <p class="construction-type-label" style="color:var(--color-ink);">Trois procédés de pose possibles</p>
+                    <p class="construction-type-desc">
+                      Suivant la dimension et la configuration du lieu, la terrasse peut être posée sur dalle, sur longrine ou
+                      sur plots plastiques. Nous étudions avec vous la solution la plus adaptée à votre projet.
+                    </p>
+                  </div>
+                  <p class="tab-panel-note mb-3" style="opacity:.75;">Nos réalisations en terrasse — cliquez sur une photo pour l'agrandir</p>
+                  <div class="grid grid-cols-3 gap-2">
+                    <template x-for="(photo, idx) in terrasseGallery" :key="idx">
+                      <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                              class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                        <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                      </button>
+                    </template>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </div>
+      </template>
+    </div>
+
+    <div x-show="row2.some(i => i.id === open)" x-collapse.duration.350ms class="tab-panel hidden sm:block">
+      <div class="tab-panel-inner">
+        <p class="tab-panel-eyebrow" x-text="(row2.find(i => i.id === open) || {}).title"></p>
+
+        <template x-if="open === 'zinguerie'">
+          <div>
+            <div class="mb-5">
+              <p class="tab-panel-text">
+                Complément indispensable de la toiture, la zinguerie est un métier à part entière, traité par une équipe
+                spécialisée qui intervient sur tout type de construction ou de rénovation. Démontage, évacuation des
+                anciens revêtements, bâchage, tout est pris en charge.
+              </p>
+              <p class="tab-panel-text">
+                En travaillant avec des matériaux nobles, CAVAGNA apporte une touche esthétique et performante,
+                sans entretien, garantissant une durabilité parfaite à l'installation réalisée.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2 mb-5">
+              <span class="material-tag">Aluminium laqué</span>
+              <span class="material-tag">Cuivre</span>
+              <span class="material-tag">Zinc</span>
+            </div>
+            <div class="construction-type-card mb-6" style="border-top-color:var(--color-burgundy);">
+              <p class="construction-type-label" style="color:var(--color-ink);">Partenariat Araltec</p>
+              <p class="construction-type-desc">
+                Pour l'aluminium laqué, nous travaillons avec Araltec, spécialiste de ce type de gouttière. La mise en
+                œuvre se fait directement sur chantier grâce à une profileuse installée sur site, qui déroule la gouttière
+                à la dimension exacte du bâtiment pour un ajustement parfait.
+              </p>
+            </div>
+            <p class="tab-panel-note mb-3" style="opacity:.75;">Nos réalisations en zinguerie — cliquez sur une photo pour l'agrandir</p>
+            <div class="grid grid-cols-6 gap-2">
+              <template x-for="(photo, idx) in zinguerieGallery" :key="idx">
+                <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                        class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                  <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                </button>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <template x-if="open === 'ossature'">
+          <div>
+            <div class="mb-5">
+              <p class="tab-panel-text">
+                Ce mode de construction est en plein développement. Performante, légère, solide, durable, esthétique,
+                l'ossature bois offre une grande liberté de conception et s'adapte à tous les sites, en résidentiel comme
+                en industriel, pour le neuf comme pour l'extension d'un bâtiment existant. Elle associe, dans une même
+                épaisseur de mur, isolation et résistance structurelle.
+              </p>
+              <p class="tab-panel-text">
+                Produit naturel et écologique, le bois, associé aux meilleurs composants en matière d'isolation, représente
+                le matériau de demain. Nous proposons divers bardages massifs, pré-peints ou en composite, avec ou sans entretien.
+              </p>
+            </div>
+            <div class="construction-type-card mb-6" style="border-top-color:var(--color-burgundy);">
+              <p class="construction-type-label" style="color:var(--color-ink);">De la conception au montage, tout est fait maison</p>
+              <p class="construction-type-desc">
+                Chaque projet fait l'objet d'une étude particulière, en lien avec les architectes et maîtres d'oeuvre, pour adapter au mieux
+                la performance thermique, l'esthétique et le rapport qualité/prix (choix de l'isolation, calculs de section,
+                plans techniques…). Les murs sont ensuite découpés et fabriqués dans notre propre atelier, avant d'être
+                assemblés et montés directement sur le chantier par nos équipes.
+              </p>
+            </div>
+            <p class="tab-panel-note mb-3" style="opacity:.75;">Nos réalisations en ossature bois — cliquez sur une photo pour l'agrandir</p>
+            <div class="grid grid-cols-6 gap-2">
+              <template x-for="(photo, idx) in ossatureGallery" :key="idx">
+                <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                        class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                  <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                </button>
+              </template>
+            </div>
+          </div>
+        </template>
+
+        <template x-if="open === 'terrasse'">
+          <div>
+            <div class="mb-5">
+              <p class="tab-panel-text">
+                Les terrasses deviennent aujourd'hui pratiquement une nouvelle pièce de la maison, un espace à vivre en
+                extérieur à qui l'on demande d'être esthétique, confortable, sûr et facile à entretenir. Synonyme de
+                détente et de convivialité, la terrasse se doit d'être parfaite, pour soi-même, et pour le plaisir de
+                l'œil qu'elle procure aux invités.
+              </p>
+              <p class="tab-panel-text">
+                Les professionnels de CAVAGNA interviennent pour proposer des solutions durables et chaleureuses
+                (bord de piscine, aménagement extérieur de la maison, accès…). En fonction des situations, divers matériaux
+                sont proposés :
+              </p>
+              <ul class="tab-panel-list">
+                <li><span class="tab-panel-list-lead">Bois autoclave :</span> durabilité prolongée, traitement anti-insectes et anti-champignons.</li>
+                <li><span class="tab-panel-list-lead">Bois Ipé :</span> bois exotique très résistant, l'une des essences les plus anciennes utilisées pour cette fonction.</li>
+                <li><span class="tab-panel-list-lead">Bois Itauba :</span> un grain très fin pour une finition homogène.</li>
+              </ul>
+            </div>
+            <div class="construction-type-card mb-6" style="border-top-color:var(--color-burgundy);">
+              <p class="construction-type-label" style="color:var(--color-ink);">Trois procédés de pose possibles</p>
+              <p class="construction-type-desc">
+                Suivant la dimension et la configuration du lieu, la terrasse peut être posée sur dalle, sur longrine ou
+                sur plots plastiques. Nous étudions avec vous la solution la plus adaptée à votre projet.
+              </p>
+            </div>
+            <p class="tab-panel-note mb-3" style="opacity:.75;">Nos réalisations en terrasse — cliquez sur une photo pour l'agrandir</p>
+            <div class="grid grid-cols-6 gap-2">
+              <template x-for="(photo, idx) in terrasseGallery" :key="idx">
+                <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                        class="gallery-thumb aspect-square rounded-lg overflow-hidden relative group">
+                  <img :src="photo.img" :alt="photo.label" class="w-full h-full object-cover">
+                </button>
+              </template>
+            </div>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div style="background:var(--color-ink);">
+  <div class="roofline"></div>
+</div>
+
+<!-- ============================================
+     3. NOS RÉALISATIONS
+     (données figées en dur — pas d'appel PHP)
+     ============================================ -->
+<section id="realisations" class="py-24 sm:py-32 px-6" style="background:var(--color-ink);" x-data="{
+    filter: 'all',
+    visibleCount: 8,
+    videoFile: 'presentation.mp4',
+    categories: [
+      { id:'charpente', label:'Charpente' },
+      { id:'couverture', label:'Couverture' },
+      { id:'zinguerie', label:'Zinguerie' },
+      { id:'ossature', label:'Ossature bois' },
+      { id:'terrasse', label:'Terrasse' },
+    ],
+    realisationsGallery: [
+      { img:'images/realisations/1.jpg', label:'Charpente traditionnelle', category:'charpente' },
+      { img:'images/realisations/2.jpg', label:'Couverture tuiles terre-cuite', category:'couverture' },
+      { img:'images/realisations/3.jpg', label:'Zinguerie sur mesure', category:'zinguerie' },
+      { img:'images/realisations/4.jpg', label:'Extension en ossature bois', category:'ossature' },
+      { img:'images/realisations/5.jpg', label:'Terrasse bord de piscine', category:'terrasse' },
+      { img:'images/realisations/6.jpg', label:'Rénovation de toiture', category:'couverture' },
+      { img:'images/realisations/7.jpg', label:'Charpente fermette industrielle', category:'charpente' },
+      { img:'images/realisations/8.jpg', label:'Pose de gouttières aluminium', category:'zinguerie' },
+      { img:'images/realisations/9.jpg', label:'Maison ossature bois', category:'ossature' },
+      { img:'images/realisations/10.jpg', label:'Terrasse bois exotique', category:'terrasse' },
+      { img:'images/realisations/11.jpg', label:'Charpente lamellé-collé', category:'charpente' },
+      { img:'images/realisations/12.jpg', label:'Couverture bac acier', category:'couverture' },
+    ],
+    get filteredGallery(){
+      return this.filter === 'all'
+        ? this.realisationsGallery
+        : this.realisationsGallery.filter(p => p.category === this.filter);
+    },
+    get visibleGallery(){
+      return this.filteredGallery.slice(0, this.visibleCount);
+    },
+    setFilter(f){ this.filter = f; this.visibleCount = 8; },
+  }">
+  <div class="max-w-6xl mx-auto">
+    <div class="reveal text-center mb-16">
+      <p class="font-semibold tracking-[0.25em] text-xs sm:text-sm uppercase mb-3" style="color:var(--color-sand);">Le travail parle de lui-même</p>
+      <h2 class="font-display font-bold text-3xl sm:text-5xl text-paper">Nos réalisations</h2>
+    </div>
+
+    <div class="reveal mb-16 max-w-4xl mx-auto">
+      <button type="button" @click="$store.videoModal.open()"
+              class="video-teaser group relative block w-full rounded-2xl overflow-hidden">
+        <video class="w-full h-full object-cover" autoplay muted loop playsinline
+              poster="images/realisations/video-poster.jpg">
+            <source :src="'images/realisations/' + videoFile" type="video/mp4">
+        </video>
+        <div class="absolute inset-0 bg-ink/25 group-hover:bg-ink/40 transition-colors duration-300"></div>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <span class="video-play-btn">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="var(--color-ink)"><path d="M8 5v14l11-7z"/></svg>
+          </span>
+        </div>
+        <span class="absolute bottom-4 left-4 text-paper text-sm font-medium px-3 py-1.5 rounded-full" style="background:rgba(38,35,32,.55);">
+          Voir la vidéo de présentation
+        </span>
+      </button>
+    </div>
+
+    <div class="flex flex-wrap justify-center gap-2 mb-10">
+      <button type="button" @click="setFilter('all')" class="gallery-filter" :class="filter === 'all' ? 'gallery-filter-active' : ''">Toutes</button>
+      <template x-for="cat in categories" :key="cat.id">
+        <button type="button" @click="setFilter(cat.id)" class="gallery-filter" :class="filter === cat.id ? 'gallery-filter-active' : ''" x-text="cat.label"></button>
+      </template>
+    </div>
+
+    <div class="masonry columns-2 md:columns-3">
+      <template x-for="(photo, i) in visibleGallery" :key="photo.img + i">
+        <button type="button" @click="$store.lightbox.open(photo.img, photo.label)"
+                class="reveal group relative rounded-xl overflow-hidden block w-full text-left">
+          <img :src="photo.img" :alt="photo.label" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/0 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <span class="absolute bottom-0 left-0 right-0 p-4 text-paper text-sm font-medium translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300" x-text="photo.label"></span>
+        </button>
+      </template>
+    </div>
+
+    <div class="text-center mt-8" x-show="visibleCount < filteredGallery.length">
+      <button type="button" @click="visibleCount += 8"
+              class="px-6 py-3 rounded-full font-semibold text-sm border transition-colors"
+              style="border-color:rgba(246,242,234,.3); color:var(--color-paper);"
+              onmouseover="this.style.backgroundColor='rgba(246,242,234,.1)'" onmouseout="this.style.backgroundColor='transparent'">
+        Voir plus de réalisations
+      </button>
+    </div>
+
+    <!-- Bloc réseaux (données figées en dur) -->
+    <div class="reveal mt-20" x-data="{
+      instaPhotos: ['images/insta/1.jpg','images/insta/2.jpg','images/insta/3.jpg','images/insta/4.jpg','images/insta/5.jpg','images/insta/6.jpg'],
+      fbPhotos: ['images/fb/1.jpg','images/fb/2.jpg','images/fb/3.jpg','images/fb/4.jpg','images/fb/5.jpg','images/fb/6.jpg'],
+    }">
+      <div class="text-center mb-10">
+        <p class="font-display font-bold text-2xl sm:text-3xl text-paper mb-2">Vous voulez en voir plus ?</p>
+        <p class="text-paper/70 text-sm sm:text-base">Retrouvez nos derniers chantiers sur nos réseaux.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 max-w-4xl mx-auto">
+        <div class="social-card">
+          <div class="social-card-header">
+            <span class="social-icon" style="background:linear-gradient(135deg,var(--color-brick),var(--color-burgundy));">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="18" height="18" rx="5" stroke="white" stroke-width="1.8"/>
+                <circle cx="12" cy="12" r="4.2" stroke="white" stroke-width="1.8"/>
+                <circle cx="17.2" cy="6.8" r="1" fill="white"/>
+              </svg>
+            </span>
+            <div class="min-w-0">
+              <p class="font-semibold text-paper text-sm truncate">@charpente.cavagna</p>
+              <p class="text-paper/50 text-paper text-xs">Instagram</p>
+            </div>
+            <a href="https://www.instagram.com/charpente.cavagna" target="_blank" rel="noopener noreferrer" class="social-visit">Voir le profil</a>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 mt-4">
+            <template x-for="(photo, i) in instaPhotos" :key="i">
+              <a href="https://www.instagram.com/charpente.cavagna" target="_blank" rel="noopener noreferrer" class="aspect-square rounded-md overflow-hidden block group relative">
+                <img :src="photo" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </a>
+            </template>
+          </div>
+        </div>
+
+        <div class="social-card">
+          <div class="social-card-header">
+            <span class="social-icon" style="background:linear-gradient(135deg,var(--color-facebook),#0d5cd6);">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                <path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06C2 17.06 5.66 21.2 10.44 22v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.78-1.63 1.57v1.88h2.78l-.45 2.91h-2.33V22C18.34 21.2 22 17.06 22 12.06z"/>
+              </svg>
+            </span>
+            <div class="min-w-0">
+              <p class="font-semibold text-paper text-sm truncate">Cavagna</p>
+              <p class="text-paper/50 text-paper text-xs">Facebook</p>
+            </div>
+            <a href="https://www.facebook.com/profile.php?id=100063818482631" target="_blank" rel="noopener noreferrer" class="social-visit">Voir la page</a>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 mt-4">
+            <template x-for="(photo, i) in fbPhotos" :key="i">
+              <a href="https://www.facebook.com/profile.php?id=100063818482631" target="_blank" rel="noopener noreferrer" class="aspect-square rounded-md overflow-hidden block group relative">
+                <img :src="photo" alt="" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </a>
+            </template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="roofline"></div>
+
+<!-- ============================================
+     4. NOUS CONTACTER
+     (formulaire non connecté dans cet aperçu)
+     ============================================ -->
+<section id="contact" class="py-24 sm:py-32 px-6 bg-paper">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-14 items-start">
+    <div class="reveal">
+      <p class="font-semibold tracking-[0.25em] text-xs sm:text-sm uppercase mb-3" style="color:var(--color-brick);">Parlons de votre projet</p>
+      <h2 class="font-display font-bold text-3xl sm:text-5xl mb-6 leading-tight">Réalisons votre projet ensemble</h2>
+      <p class="text-sm sm:text-base leading-relaxed" style="color:var(--color-ink); opacity:.8;">
+        Rénovation ou construction : décrivez-nous votre besoin, notre équipe revient
+        vers vous rapidement pour établir un premier échange et, si besoin, un devis adapté.
+      </p>
+
+      <div class="mt-10 space-y-3 text-2xl">
+        <p class="flex items-center gap-3">
+          <span class="w-12 h-12 rounded-full flex items-center justify-center shrink-0" style="background:var(--color-sand);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="var(--color-ink)" stroke-width="1.8"/></svg>
+          </span>
+          <span class="opacity-80"><a href="tel:0474931864">04 74 93 18 64</a></span>
+        </p>
+      </div>
+    </div>
+
+    <form id="contact-form" class="reveal bg-white/50 border rounded-2xl p-6 sm:p-8 space-y-5" style="border-color:var(--color-sand); transition-delay:.1s"
+      x-data="{
+        sending:false, feedback:'', feedbackError:false,
+        captchaA: Math.floor(Math.random()*9)+1,
+        captchaB: Math.floor(Math.random()*9)+1,
+      }"
+      @submit.prevent="
+        feedback = 'Aperçu uniquement — ce formulaire n\'est pas connecté à un serveur dans cette version.';
+        feedbackError = true;
+      ">
+
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div>
+          <label for="prenom" class="block text-xs font-semibold uppercase tracking-wide mb-2">Prénom *</label>
+          <input required id="prenom" name="prenom" type="text" class="field-input w-full rounded-lg px-4 py-2.5 text-sm">
+        </div>
+        <div>
+          <label for="nom" class="block text-xs font-semibold uppercase tracking-wide mb-2">Nom *</label>
+          <input required id="nom" name="nom" type="text" class="field-input w-full rounded-lg px-4 py-2.5 text-sm">
+        </div>
+      </div>
+
+      <div>
+        <label for="telephone" class="block text-xs font-semibold uppercase tracking-wide mb-2">Téléphone *</label>
+        <input required id="telephone" name="telephone" type="tel" class="field-input w-full rounded-lg px-4 py-2.5 text-sm">
+      </div>
+
+      <div>
+        <label for="adresse" class="block text-xs font-semibold uppercase tracking-wide mb-2">Adresse postale *</label>
+        <input required id="adresse" name="adresse" type="text" placeholder="Numéro et rue" class="field-input w-full rounded-lg px-4 py-2.5 text-sm mb-3">
+        <div class="grid grid-cols-2 gap-3">
+          <input required id="cp" name="code_postal" type="text" placeholder="Code postal" class="field-input w-full rounded-lg px-4 py-2.5 text-sm">
+          <input required id="ville" name="ville" type="text" placeholder="Ville" class="field-input w-full rounded-lg px-4 py-2.5 text-sm">
+        </div>
+      </div>
+
+      <div>
+        <label for="message" class="block text-xs font-semibold uppercase tracking-wide mb-2">Votre message *</label>
+        <textarea required id="message" name="message" rows="4" class="field-input w-full rounded-lg px-4 py-2.5 text-sm resize-none"></textarea>
+      </div>
+
+      <div>
+        <label for="captcha" class="block text-xs font-semibold uppercase tracking-wide mb-2">
+          Combien font <span x-text="captchaA"></span> + <span x-text="captchaB"></span> ? *
+        </label>
+        <input required id="captcha" name="captcha" type="number" inputmode="numeric" class="field-input w-full rounded-lg px-4 py-2.5 text-sm">
+      </div>
+
+      <p x-show="feedback" x-text="feedback" class="text-sm px-4 py-3 rounded-lg" :class="feedbackError ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'"></p>
+
+      <button type="submit" :disabled="sending"
+              class="w-full py-3.5 rounded-lg font-semibold text-sm transition-transform hover:-translate-y-0.5 disabled:opacity-60"
+              style="background:var(--color-ink); color:var(--color-paper);">
+        <span x-show="!sending">Envoyer ma demande</span>
+        <span x-show="sending">Envoi en cours…</span>
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+<footer style="background:var(--color-ink); color:var(--color-paper);" class="pt-16 pb-8 px-6">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-10 mb-12">
+    <div>
+      <img class="mb-4" src="images/logo-white.png" />
+      <p class="text-sm text-paper/70 leading-relaxed">
+        Charpente, couverture et zinguerie depuis 1971.<br>Certifié Qualibat RGE — Assurance décennale.
+      </p>
+    </div>
+
+    <div class="text-sm space-y-3">
+      <p class="font-semibold uppercase tracking-wide text-xs mb-2" style="color:var(--color-sand);">Contact</p>
+      <p class="text-paper/80">Téléphone : <a href="tel:0474931864">04 74 93 18 64</a></p>
+      <p class="text-paper/80">Email : <a href="mailto:contact@charpentecavagna.fr">contact@charpentecavagna.fr</a></p>
+      <p class="text-paper/80">4 Av. de Chantereine, 38300 Bourgoin-Jallieu</p>
+    </div>
+
+    <div class="rounded-xl overflow-hidden h-40 md:h-full min-h-[140px]">
+      <iframe class="map-frame w-full h-full grayscale" style="border:0;"
+              src="https://www.google.com/maps?q=Cavagna charpente&output=embed"
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Localisation Charpentes CAVAGNA"></iframe>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto pt-6 border-t border-paper/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-paper/60">
+    <p>&copy; Charpentes CAVAGNA <span id="year"></span></p>
+
+    <p class="order-last sm:order-none">
+      Un site conçu par
+      <a href="https://tom-befieux.fr" target="_blank" rel="noopener noreferrer" class="font-medium text-paper/80 hover:text-paper transition-colors underline underline-offset-2">
+        Tom Befieux
+      </a>
+    </p>
+
+    <div class="flex gap-6">
+      <a href="mentions-legales.html" class="hover:text-paper transition-colors">Mentions légales</a>
+      <a href="politique-confidentialite.html" class="hover:text-paper transition-colors">Politique de confidentialité</a>
+    </div>
+  </div>
+</footer>
+
+<div x-data x-show="$store.lightbox.visible" x-cloak
+     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+     @keydown.escape.window="$store.lightbox.close()"
+     class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8" style="background:rgba(38,35,32,0.92);">
+  <button @click="$store.lightbox.close()" aria-label="Fermer" class="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full flex items-center justify-center text-paper hover:bg-white/10 transition-colors">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div class="max-w-4xl w-full" @click.outside="$store.lightbox.close()">
+    <img :src="$store.lightbox.src" :alt="$store.lightbox.label" class="w-full max-h-[75vh] object-contain rounded-lg">
+    <p class="text-paper text-center mt-4 text-sm sm:text-base font-medium" x-text="$store.lightbox.label"></p>
+  </div>
+</div>
+
+<div x-data x-show="$store.videoModal.visible" x-cloak
+     x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+     x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+     @keydown.escape.window="$store.videoModal.close()"
+     class="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8" style="background:rgba(38,35,32,0.92);">
+  <button @click="$store.videoModal.close()" aria-label="Fermer" class="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full flex items-center justify-center text-paper hover:bg-white/10 transition-colors">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <div class="max-w-4xl w-full" @click.outside="$store.videoModal.close()">
+    <video class="w-full max-h-[80vh] rounded-lg" controls playsinline
+           src="images/realisations/presentation.mp4">
+    </video>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('alpine:init', () => {
+    Alpine.store('lightbox', {
+      visible: false, src: '', label: '',
+      open(src, label){ this.src = src; this.label = label; this.visible = true; },
+      close(){ this.visible = false; }
+    });
+    Alpine.store('videoModal', {
+      visible: false,
+      open(){ this.visible = true; },
+      close(){ this.visible = false; }
+    });
+  });
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  const mutationObserver = new MutationObserver(() => {
+    document.querySelectorAll('.reveal:not(.is-visible)').forEach(el => revealObserver.observe(el));
+  });
+  mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+  const sections = document.querySelectorAll('section[id]');
+  const navTiles = document.querySelectorAll('.nav-link, .nav-link-mobile');
+
+  function updateActiveNav(){
+    const offset = 130;
+    let currentId = sections[0]?.id;
+    sections.forEach(section => {
+      if (section.getBoundingClientRect().top - offset <= 0) {
+        currentId = section.id;
+      }
+    });
+    navTiles.forEach(t => t.classList.toggle('is-active', t.dataset.nav === currentId));
+  }
+
+  window.addEventListener('scroll', updateActiveNav, { passive:true });
+  window.addEventListener('resize', updateActiveNav);
+  updateActiveNav();
+</script>
+</body>
+</html>
