@@ -160,8 +160,7 @@
           </ul>
         </section>
 
-        <br/>TODO: rajouter info pour ceux qui dorment genre il y a une salle de bain et des serviette genre ?
-        TODO: Mettre plus en avant la couleur imposée des tenues
+        TODO: Mettre plus en avant la couleur imposée des tenues et dress code
 
         <!-- Un bloc par groupe de personnes partageant exactement
              le même programme (mêmes événements, mêmes nuits, même chambre) -->
@@ -175,14 +174,31 @@
                   <span x-text="p.prenom + ' ' + p.nom"></span>
                 </span>
               </template>
-              <template x-if="group.room">
-                <span class="ml-auto px-3 py-1 rounded-full bg-lilas/60 text-sm flex items-center gap-1.5">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v11m0-4h18m0 4V10a2 2 0 00-2-2h-7a2 2 0 00-2 2v4M3 7l4-4h9l4 4"/></svg>
-                  Chambre : 
-                  <span x-text="group.room"></span>
-                </span>
-              </template>
             </div>
+
+            <!-- Encadré pour celles et ceux qui dorment au domaine -->
+            <template x-if="group.nights.length">
+              <div class="mb-6 bg-lilas/25 border border-gris/50 rounded-xl px-4 py-3">
+                <p class="font-medium text-encre text-sm mb-1 flex items-center gap-1.5">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-encre/60 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7v11m0-4h18m0 4V10a2 2 0 00-2-2h-7a2 2 0 00-2 2v4M3 7l4-4h9l4 4"/></svg>
+                  <span x-text="group.persons.length > 1
+                    ? 'Vous êtes un peu privilégié·es… vous dormez au domaine !'
+                    : 'Vous êtes un peu privilégié·e… vous dormez au domaine !'"></span>
+                </p>
+                <template x-if="group.room">
+                  <p class="text-sm text-encre/80 mt-1">
+                    Votre chambre sera « <span class="font-medium" x-text="group.room"></span> ».
+                  </p>
+                </template>
+                <p class="text-sm text-encre/70 mt-1">
+                  Le linge de lit et les serviettes de bain sont fournis. Aussi, chaque douche du domaine est équipée d'un distributeur à deux compartiments gel douche + shampoing. En revanche, il n'y a pas de sèche-cheveux.
+                </p>
+                <p class="text-sm text-encre/70 mt-1">
+                  Et comme on sera fin avril, il y aura peut-être piscine : si vous voulez en profiter,
+                  pensez à ramener votre serviette de piscine ! 🏊
+                </p>
+              </div>
+            </template>
 
             <!-- ==================================================
                  TIMELINE — élément signature de la page.
