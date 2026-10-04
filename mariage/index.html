@@ -160,8 +160,6 @@
           </ul>
         </section>
 
-        TODO: Mettre plus en avant la couleur imposée des tenues et dress code
-
         <!-- Un bloc par groupe de personnes partageant exactement
              le même programme (mêmes événements, mêmes nuits, même chambre) -->
         <template x-for="group in personGroups" :key="group.key">
@@ -195,7 +193,7 @@
                 </p>
                 <p class="text-sm text-encre/70 mt-1">
                   Et comme on sera fin avril, il y aura peut-être piscine : si vous voulez en profiter,
-                  pensez à ramener votre serviette de piscine ! 🏊
+                  pensez à ramener votre serviette de piscine et un maillot ! 🏊
                 </p>
               </div>
             </template>
@@ -226,8 +224,8 @@
 
                     <div :class="step.active ? '' : 'opacity-45'">
                       <p class="font-display text-xl leading-tight" x-text="step.label"></p>
-                      <p class="text-xs uppercase tracking-wide text-encre/50 mt-0.5">
-                        <span x-text="step.day"></span> · <span x-text="step.time"></span>
+                      <p class="text-m uppercase tracking-wide mt-0.5">
+                        <span x-text="step.day"></span> · <b x-text="step.time"></b>
                       </p>
                       <p class="text-sm text-encre/70 mt-1" x-text="step.desc"></p>
 
@@ -465,7 +463,7 @@ function guestApp(){
     // C'est cette liste qui pilote l'ordre affiché dans la timeline.
     EVENTS: [
       { key: 'jeudi',      label: 'Le jeudi',                        day: 'Jeudi 22 avril',    time: 'À partir de 17h', desc: "Arrivée et on s'amuse au domaine ! (et on commence à préparer quand même)" },
-      { key: 'mairie',     label: 'La mairie',                       day: 'Vendredi 23 avril', time: '16h00',          desc: 'Cérémonie civile en petit comité, puis festivités au domaine.' },
+      { key: 'mairie',     label: 'La mairie',                       day: 'Vendredi 23 avril', time: '15h40',          desc: 'Cérémonie civile en petit comité, puis festivités au domaine.' },
       { key: 'ceremonie',  label: 'Cérémonie laïque & vin d\'honneur',day: 'Samedi 24 avril',   time: '15h00',          desc: 'La cérémonie, suivie du vin d\'honneur.' },
       { key: 'repas',      label: 'Repas du soir',                   day: 'Samedi 24 avril',   time: '20h00',          desc: 'Dîner assis puis soirée dansante.' },
       { key: 'brunch',     label: 'Brunch',                          day: 'Dimanche 25 avril', time: '10h00',          desc: 'Brunch de clôture avant les au revoir.' },
@@ -1705,9 +1703,9 @@ function guestApp(){
         "nights": [],
         "room": null,
         "rsvp": {
-          "mairie": null,
-          "ceremonie": null,
-          "repas": null
+          "mairie": "yes",
+          "ceremonie": "yes",
+          "repas": "yes"
         }
       }
     ]
