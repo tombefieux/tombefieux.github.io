@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le Copiste — POC</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#c7cfca; --ink:#1f2724; --muted:#55615c; --plaque:#f1efe8; --line:#aeb8b2;
+  --wood:#7a5233; --wood2:#5e3d25; --gold:#c9a24a; --canvas:#f6f4ee; --pencil:#d3cdbf; --tape:#dfcb93;
+  --c0:#c8323c; --c1:#2f4fb8; --c2:#2e9a6a; --c3:#e8b92e;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1d2321; --ink:#ecefed; --muted:#9aa6a1; --plaque:#2a3230; --line:#3b4643;
+    --wood:#8a6040; --wood2:#6a4529; --pencil:#c9c3b4; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1d2321; --ink:#ecefed; --muted:#9aa6a1; --plaque:#2a3230; --line:#3b4643;
+  --wood:#8a6040; --wood2:#6a4529; --pencil:#c9c3b4; color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh}
+main{max-width:760px;margin:0 auto;padding:22px 16px 36px}
+h1{font-size:1.9rem;margin:0 0 4px;letter-spacing:-.02em;font-weight:700}
+.sub{color:var(--muted);margin:0 0 22px;max-width:46ch}
+.layout{display:flex;flex-wrap:wrap;gap:28px;align-items:flex-start}
+.play{flex:1 1 330px;min-width:0}
+.side{flex:0 0 auto}
+.frame{padding:12px;border-radius:3px;background:linear-gradient(135deg,var(--wood),var(--wood2));box-shadow:0 10px 22px rgba(0,0,0,.28),inset 0 0 0 2px rgba(255,255,255,.12)}
+.frame.small{padding:6px;width:168px;box-shadow:0 6px 14px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.12);background:linear-gradient(135deg,var(--gold),#a5802f)}
+.frame.big{max-width:440px}
+.grid{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;background:var(--pencil);padding:3px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.25)}
+.play-grid{width:100%;aspect-ratio:1}
+.mini{gap:2px;padding:2px}
+.cell{aspect-ratio:1;border:0;border-radius:2px;padding:0;cursor:pointer;
+  background-color:var(--canvas);
+  background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 3px),repeating-linear-gradient(90deg,rgba(0,0,0,.035) 0 1px,transparent 1px 3px);
+  transition:background-color .2s ease}
+.mini .cell{cursor:default}
+.cell.paint{background-image:linear-gradient(135deg,rgba(255,255,255,.22),rgba(0,0,0,.08));box-shadow:inset 0 0 0 1px rgba(0,0,0,.12)}
+.cell.wall{background-color:var(--tape);background-image:repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 1px,transparent 1px 5px);box-shadow:0 1px 2px rgba(0,0,0,.35);cursor:not-allowed}
+.cell.pop{animation:splash .3s ease-out}
+@keyframes splash{0%{transform:scale(.55);filter:brightness(1.35)}60%{transform:scale(1.07)}100%{transform:scale(1);filter:none}}
+.cell:focus-visible,.pot:focus-visible,.btn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.locked .cell{cursor:progress}
+.plaque{display:inline-block;margin-top:10px;padding:3px 10px;background:var(--plaque);border:1px solid var(--line);border-radius:2px;font-size:.85rem;color:var(--muted)}
+.palette{display:flex;gap:12px;margin:22px 0 16px}
+.pot{width:52px;height:46px;border:0;padding:0;cursor:pointer;border-radius:6px 6px 14px 14px;background:var(--pc);
+  box-shadow:inset 0 10px 0 rgba(255,255,255,.22),inset 0 -6px 0 rgba(0,0,0,.18),0 3px 0 rgba(0,0,0,.25);transition:transform .15s}
+.pot[aria-pressed="true"]{transform:translateY(-6px);box-shadow:inset 0 10px 0 rgba(255,255,255,.22),inset 0 -6px 0 rgba(0,0,0,.18),0 9px 0 rgba(0,0,0,.2),0 0 0 3px var(--bg),0 0 0 5px var(--ink)}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.btn{font:inherit;font-weight:500;background:var(--plaque);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:9px 14px;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.main{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.score{margin-top:16px;font-variant-numeric:tabular-nums}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin-top:6px;width:168px}
+.bar i{display:block;height:100%;width:0;background:var(--c2);transition:width .25s}
+.stat{color:var(--muted);font-size:.92rem;margin-top:10px}
+.win{margin-top:18px;padding:12px 14px;border-radius:4px;background:var(--plaque);border:1px solid var(--gold);display:none;max-width:440px}
+.win.show{display:block}
+.win.lose{border-color:var(--c0)}
+.stars{font-size:1.7rem;letter-spacing:.1em;color:var(--gold);margin-bottom:2px}
+body{-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+.cell,.pot,.btn{touch-action:manipulation}
+.play.ended .palette{display:none}
+@media (max-width:640px){
+  main{padding:10px 14px 18px}
+  h1{font-size:1.3rem;margin:0 0 8px}
+  .sub{display:none}
+  .layout{flex-direction:column;flex-wrap:nowrap;gap:14px}
+  .play{flex:0 0 auto;width:100%}
+  .side{order:-1;display:flex;gap:14px;align-items:center;width:100%}
+  .frame.small{width:104px;padding:5px;flex:none}
+  .info{flex:1;min-width:0}
+  .info .plaque{margin:0 0 6px;font-size:.78rem}
+  .score{margin-top:0}
+  .bar{width:100%}
+  .stat{margin-top:6px;font-size:.88rem}
+  .frame.big{width:min(100%,calc(100dvh - 400px));min-width:260px;margin:0 auto;padding:8px}
+  .palette{gap:10px;margin:16px 0 12px}
+  .pot{flex:1;width:auto;height:54px}
+  .actions{display:grid;grid-template-columns:1fr 1fr 1.2fr}
+  .btn{min-height:48px;padding:8px 6px;font-size:.92rem}
+  .win{max-width:none;margin-top:14px}
+}
+@media (prefers-reduced-motion:reduce){.cell,.bar i,.pot{transition:none}.cell.pop{animation:none}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Le Copiste</h1>
+  <p class="sub">Reproduis le modèle sur ta toile. Chaque coup de pinceau coule sur sa ligne et sa colonne jusqu’au ruban de masquage.</p>
+  <div class="layout">
+    <section class="play" aria-label="Ta toile">
+      <div class="frame big"><div id="grid" class="grid play-grid"></div></div>
+      <div class="win" id="win" role="status"></div>
+      <div class="palette" id="palette" role="group" aria-label="Pigment à appliquer"></div>
+      <div class="actions">
+        <button class="btn" id="undo">Annuler</button>
+        <button class="btn" id="reset">Réinitialiser</button>
+        <button class="btn main" id="new">Nouveau modèle</button>
+      </div>
+    </section>
+    <aside class="side" aria-label="Modèle à copier">
+      <div class="frame small"><div id="mini" class="grid mini"></div></div>
+      <div class="info">
+        <div class="plaque">Modèle à copier</div>
+        <div class="score"><span id="ok">0 / 0</span> cases justes<div class="bar"><i id="barfill"></i></div></div>
+        <div class="stat">Coups : <span id="moves">0</span> / <span id="limit">0</span></div>
+        <div class="stat" style="margin-top:4px">Annulations restantes : <span id="undos">0</span></div>
+      </div>
+    </aside>
+  </div>
+</main>
+<script>
+(function(){
+  var N=6, COLORS=4, WALLS=5, STEP_MS=90, TOLERANCE=2, UNDOS=3;
+  var walls, target, grid, history, moves, busy, selected=0, genClicks=0, undosLeft=0, solved=false, ended=false;
+  var gridEl=document.getElementById('grid'), miniEl=document.getElementById('mini');
+  var cells=[], miniCells=[];
+  var idx=function(r,c){return r*N+c};
+  var rnd=function(n){return Math.floor(Math.random()*n)};
+  var limit=function(){return genClicks+TOLERANCE};
+
+  function waves(r,c){
+    var out=[[idx(r,c)]], dirs=[[1,0],[-1,0],[0,1],[0,-1]];
+    for(var d=1;d<N;d++){
+      var layer=[];
+      dirs.forEach(function(v){
+        var ok=true;
+        for(var k=1;k<=d;k++){
+          var rr=r+v[0]*k, cc=c+v[1]*k;
+          if(rr<0||cc<0||rr>=N||cc>=N||walls[idx(rr,cc)]){ok=false;break}
+        }
+        if(ok) layer.push(idx(r+v[0]*d,c+v[1]*d));
+      });
+      if(layer.length) out.push(layer); else break;
+    }
+    return out;
+  }
+
+  function generate(){
+    for(;;){
+      walls=new Array(N*N).fill(false);
+      var placed=0; while(placed<WALLS){var i=rnd(N*N); if(!walls[i]){walls[i]=true;placed++}}
+      var t=new Array(N*N).fill(-1), clicks=0, free=[];
+      for(var i2=0;i2<N*N;i2++) if(!walls[i2]) free.push(i2);
+      while(clicks<300 && free.some(function(i){return t[i]<0})){
+        var p=free[rnd(free.length)], col=rnd(COLORS);
+        waves(Math.floor(p/N),p%N).forEach(function(l){l.forEach(function(j){t[j]=col})});
+        clicks++;
+      }
+      if(clicks>=3 && free.every(function(i){return t[i]>=0})){target=t;genClicks=clicks;return}
+    }
+  }
+
+  function build(){
+    gridEl.innerHTML='';miniEl.innerHTML='';cells=[];miniCells=[];
+    for(var i=0;i<N*N;i++){
+      var b=document.createElement('button');b.className='cell';b.dataset.i=i;
+      b.setAttribute('aria-label','Ligne '+(Math.floor(i/N)+1)+', colonne '+(i%N+1));
+      b.addEventListener('click',onClick);gridEl.appendChild(b);cells.push(b);
+      var m=document.createElement('div');m.className='cell';miniEl.appendChild(m);miniCells.push(m);
+    }
+  }
+
+  function paint(el,v,isWall){
+    el.classList.toggle('wall',isWall);
+    el.classList.toggle('paint',!isWall&&v>=0);
+    el.style.backgroundColor=(!isWall&&v>=0)?'var(--c'+v+')':'';
+  }
+  function render(){
+    var good=0,total=0;
+    for(var i=0;i<N*N;i++){
+      paint(cells[i],grid[i],walls[i]);paint(miniCells[i],target[i],walls[i]);
+      if(!walls[i]){total++; if(grid[i]===target[i])good++}
+    }
+    document.getElementById('ok').textContent=good+' / '+total;
+    document.getElementById('barfill').style.width=(good/total*100)+'%';
+    solved=(good===total);ended=solved||moves>=limit();
+    document.getElementById('moves').textContent=moves;
+    document.getElementById('limit').textContent=limit();
+    document.getElementById('undos').textContent=undosLeft;
+    document.getElementById('undo').disabled=busy||!history.length||undosLeft<=0||solved;
+    document.getElementById('reset').disabled=busy||(!history.length);
+    gridEl.classList.toggle('locked',busy);
+    var win=document.getElementById('win');
+    document.querySelector('.play').classList.toggle('ended',ended);
+    win.classList.toggle('show',ended);win.classList.toggle('lose',ended&&!solved);
+    if(solved){
+      var st=moves<=genClicks?3:moves<=genClicks+1?2:1;
+      win.innerHTML='<div class="stars" aria-label="'+st+' étoiles">'+'★'.repeat(st)+'☆'.repeat(3-st)+'</div>Copie réussie en '+moves+' coups (le modèle a été peint en '+genClicks+').';
+    }else if(ended){
+      win.textContent='Plus de coups. '+(undosLeft>0?'Annule un coup ou réinitialise':'Réinitialise')+' pour retenter.';
+    }
+    return solved;
+  }
+
+  function onClick(e){
+    if(busy||ended) return;
+    var i=+e.currentTarget.dataset.i;
+    if(walls[i]) return;
+    history.push(grid.slice());moves++;busy=true;
+    var layers=waves(Math.floor(i/N),i%N), s=0;
+    document.getElementById('undo').disabled=true;
+    document.getElementById('reset').disabled=true;
+    gridEl.classList.add('locked');
+    (function step(){
+      if(s>=layers.length){busy=false;render();return}
+      layers[s].forEach(function(j){
+        grid[j]=selected;paint(cells[j],selected,false);
+        cells[j].classList.remove('pop');void cells[j].offsetWidth;cells[j].classList.add('pop');
+        (function(c){setTimeout(function(){c.classList.remove('pop')},320)})(cells[j]);
+      });
+      s++;setTimeout(step,STEP_MS);
+    })();
+  }
+
+  function newGame(){generate();reset()}
+  function reset(){
+    grid=new Array(N*N).fill(-1);history=[];moves=0;busy=false;undosLeft=UNDOS;solved=false;ended=false;
+    if(!cells.length) build();
+    render();
+  }
+
+  document.getElementById('undo').addEventListener('click',function(){
+    if(busy||!history.length||undosLeft<=0||solved) return;
+    grid=history.pop();moves=Math.max(0,moves-1);undosLeft--;render();
+  });
+  document.getElementById('reset').addEventListener('click',function(){if(!busy) reset()});
+  document.getElementById('new').addEventListener('click',function(){if(!busy) newGame()});
+
+  var pal=document.getElementById('palette'), names=['Carmin','Outremer','Vert véronèse','Jaune de Naples'];
+  for(var k=0;k<COLORS;k++){
+    (function(k){
+      var s=document.createElement('button');s.className='pot';s.style.setProperty('--pc','var(--c'+k+')');
+      s.setAttribute('aria-label',names[k]);s.title=names[k];s.setAttribute('aria-pressed',k===0);
+      s.addEventListener('click',function(){
+        selected=k;[].forEach.call(pal.children,function(x,j){x.setAttribute('aria-pressed',j===k)});
+      });
+      pal.appendChild(s);
+    })(k);
+  }
+  newGame();
+})();
+</script>
+</body>
+</html>
