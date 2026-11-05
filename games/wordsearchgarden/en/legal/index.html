@@ -310,8 +310,12 @@
     </section>
 
     <footer>
-      <div>© 2025 — <strong>Tom Befieux</strong></div>
+      <div>© <span id="year"></span> — <strong>Tom Befieux</strong></div>
     </footer>
   </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
